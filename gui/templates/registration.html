@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  <div class="content-wrapper" style="min-height: 956px;">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        <i class="fa fa-user-plus"></i> Registration
+        <small>Patient</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">Registration</a></li>
+        <li class="active">Patient</li>
+      </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-md-9">
+          <div class="box box-primary">
+            <div class="box-header">
+              <h3 class="box-title">Patient Info</h3>
+            </div>
+            <div class="box-body">
+              <form>
+                <div class="form-row">
+                  <div class="form-group col-md-3">
+                    <img id="picture" class="img-thumbnail" src="{% static "img/picture.png" %}" width="200px" height="150px"/>
+                  </div>
+                </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-user"></i> <label for="firstname">First name *</label>
+                  <input type="text" class="form-control" id="firstname" placeholder="First name">
+                </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-user"></i> <label for="lastname">Last name *</label>
+                  <input type="text" class="form-control" id="lastname" placeholder="Last name">
+                </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-transgender-alt"></i> <label for="input-type">Gender *</label>
+                  <div id="input-type" class="row">
+                    <div class="col-sm-2">
+                      <label class="radio-inline">
+                          <input name="account_type" id="input-type-student" value="Student" type="radio" /> Male
+                      </label>
+                    </div>
+                    <div class="col-sm-2">
+                      <label class="radio-inline">
+                          <input name="account_type" id="input-type-tutor" value="Tutor" type="radio" /> Female
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-mobile"></i> <label for="mobile">Mobile *</label>
+                  <input type="text" class="form-control" id="mobile" placeholder="Mobile">
+                </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-calendar"></i> <label>Date of birth *</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">
+                      <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" />
+                  </div>
+                </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-user-circle"></i> <label for="age">Age</label>
+                  <input type="number" class="form-control" id="age" placeholder="Age">
+                </div>
+                <div class="form-group col-md-3">
+                  </div>
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label>Weight (kg)</label>
+                    <div class="input-group" style="width: 100%">
+                      <input id="weight" type="range" min="0" max="120" step="0.5" value="0"/>
+                      <small id="weight_value"></small>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Height (ft.)</label>
+                    <div class="input-group" style="width: 100%">
+                      <input id="height" type="range" min="0" max="8" step="0.1" value="0"/>
+                      <small id="height_value"><b></b>Inchs</small>′
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-building-o margin-r-5"></i> <label for="door">Door No.</label>
+                  <input type="text" class="form-control" id="door" placeholder="Door no, Apartment, studio, or floor">
+                </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-street-view margin-r-5"></i> <label for="street">Street Name</label>
+                  <input type="text" class="form-control" id="street" placeholder="Street name">
+                </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-map-marker margin-r-5"></i> <label for="city">City</label>
+                  <input type="text" class="form-control" id="city" placeholder="City">
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <i class="fa fa-map-marker margin-r-5"></i> <label for="inputState">State</label>
+                    <select id="inputState" class="form-control">
+                      <option value="Andhra Pradesh">Andhra Pradesh</option>
+                      <option value="Andhra Pradesh">Arunachal Pradesh</option>
+                      <option value="Andhra Pradesh">Asom (Assam)</option>
+                      <option value="Andhra Pradesh">Bihar</option>
+                      <option value="Andhra Pradesh">Karnataka</option>
+                      <option value="Andhra Pradesh">Kerala</option>
+                      <option value="Andhra Pradesh">Chhattisgarh</option>
+                      <option value="Andhra Pradesh">Uttar Pradesh</option>
+                      <option value="Andhra Pradesh">Goa</option>
+                      <option value="Andhra Pradesh">Gujarat</option>
+                      <option value="Andhra Pradesh">Haryana</option>
+                      <option value="Andhra Pradesh">Himachal Pradesh</option>
+                      <option value="Andhra Pradesh">Jammu and Kashmir</option>
+                      <option value="Andhra Pradesh">Jharkhand</option>
+                      <option value="Andhra Pradesh">West Bengal</option>
+                      <option value="Andhra Pradesh">Madhya Pradesh</option>
+                      <option value="Andhra Pradesh">Maharashtra</option>
+                      <option value="Andhra Pradesh">Madhya Pradesh</option>
+                      <option value="Andhra Pradesh">Manipur</option>
+                      <option value="Andhra Pradesh">Meghalaya</option>
+                      <option value="Andhra Pradesh">Mizoram</option>
+                      <option value="Andhra Pradesh">Nagaland</option>
+                      <option value="Andhra Pradesh">Orissa</option>
+                      <option value="Andhra Pradesh">Other</option>
+                      <option value="Andhra Pradesh">Punjab</option>
+                      <option value="Andhra Pradesh">Rajasthan</option>
+                      <option value="Andhra Pradesh">Sikkim</option>
+                      <option value="Andhra Pradesh">Tamil Nadu</option>
+                      <option value="Andhra Pradesh">Telangana</option>
+                      <option value="Andhra Pradesh">Tripura</option>
+                      <option value="Andhra Pradesh">Telangana</option>
+                      <option value="Andhra Pradesh">Uttarakhand (Uttaranchal)</option>
+                      <option value="Andhra Pradesh">Andaman and Nicobar</option>
+                      <option value="Andhra Pradesh">Pondicherry</option>
+                      <option value="Andhra Pradesh">Dadra and Nagar Haveli</option>
+                      <option value="Andhra Pradesh">Daman and Diu</option>
+                      <option value="Andhra Pradesh">Delhi</option>
+                      <option value="Andhra Pradesh">Chandigarh</option>
+                      <option value="Andhra Pradesh">Lakshadweep</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <i class="fa fa-map-pin margin-r-5"></i> <label for="pincode">Pincode</label>
+                    <input type="text" class="form-control" id="pincode">
+                  </div>
+                </div>
+                <div class="form-group col-md-12">
+                  <button type="submit" class="btn btn-primary">Sign in</button>
+                </div>
+              </form>
+            </div>
+            <!-- /.box-body -->
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="box box-primary">
+            <div class="box-header">
+              <h3 class="box-title">Picture Preview</h3>
+            </div>
+
+            <div class="box-body" >
+              <div class="form-group">
+                <div class="c1">
+                  <div class="c2" id="camera">
+                  </div>
+                </div>
+              </div>
+              <input type=button style="display: block; margin-right: auto; margin-left: auto;" class="btn btn-default" value="Take Snapshot" onClick="take_snapshot()">
+            </div>
+            <!-- /.box-body -->
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.content -->
+  </div>
+  <script>
+    var weight = document.getElementById("weight");
+    var weight_output = document.getElementById("weight_value");
+    weight_output.innerHTML = weight.value;
+    weight.oninput = function() {
+      weight_output.innerText = this.value;
+    }
+    var height = document.getElementById("height");
+    var height_output = document.getElementById("height_value");
+    height_output.innerHTML = height.value;
+    height.oninput = function() {
+      height_output.innerHTML = this.value;
+    }
+  </script>
+  <script type="text/javascript" src="{% static "js/webcam.min.js" %}"></script>
+	<!-- Configure a few settings and attach camera -->
+	<script type="text/javascript">
+		Webcam.set({
+			width: 200,
+			height: 150,
+			image_format: 'jpeg',
+			jpeg_quality: 90,
+      force_flash: false
+		});
+		Webcam.attach( '#camera' );
+	</script>
+  <script type="text/javascript">
+		function take_snapshot() {
+			Webcam.snap( function(data_uri) {
+				document.getElementById('picture').src = data_uri;
+			} );
+		}
+	</script>
+  <style>
+  .c1 {
+    height: 200px;
+    position: relative;
+    border: 2px solid #3c8dbc;
+  }
+  .c2 {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+  </style>
+{% endblock content %}
