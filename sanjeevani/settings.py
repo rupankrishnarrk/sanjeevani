@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'sanjeevani.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'sanjeevani',
+        'USER': 'postgres',
+        'PASSWORD': 'P@$$w0rd',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -119,3 +123,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Request redirect for login
+LOGIN_URL = '/login'
+
+# Request to redirect after login
+LOGIN_REDIRECT_URL = '/home'
+
+# Request to redirect after logout
+LOGOUT_REDIRECT_URL = '/login'

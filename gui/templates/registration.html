@@ -23,51 +23,72 @@
               <h3 class="box-title">Patient Info</h3>
             </div>
             <div class="box-body">
-              <form>
+              <form method="post" autocomplete="off" enctype="multipart/form-data">{% csrf_token %}
                 <div class="form-row">
                   <div class="form-group col-md-3">
-                    <img id="picture" class="img-thumbnail" src="{% static "img/picture.png" %}" width="200px" height="150px"/>
+                    <img id="preview" class="img-thumbnail" width="200px" height="150px" {% if form.is_bound %} src="{{ form.picture.value}} {% else %} src="{% static "img/picture.png" %}" {% endif %}"/>
+                    <textarea id="picture" name="picture" hidden> {% if form.is_bound %} {{ form.picture.value}} {% else %} {{ profile_base64 }} {% endif %}</textarea>
+                    {% for error in form.picture.errors %}
+                      <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
                   </div>
                 </div>
                 <div class="form-group col-md-4">
-                  <i class="fa fa-user"></i> <label for="firstname">First name *</label>
-                  <input type="text" class="form-control" id="firstname" placeholder="First name">
+                  <i class="fa fa-user"></i> <label>First name *</label>
+                  <input type="text" class="form-control" name="first_name" placeholder="First name" required minlength="3" maxlength="12" {% if form.is_bound %} value="{{ form.first_name.value}}{% endif %}">
+                  {% for error in form.first_name.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                  {% endfor %}
                 </div>
                 <div class="form-group col-md-4">
-                  <i class="fa fa-user"></i> <label for="lastname">Last name *</label>
-                  <input type="text" class="form-control" id="lastname" placeholder="Last name">
+                  <i class="fa fa-user"></i> <label>Last name *</label>
+                  <input type="text" class="form-control" name="last_name" placeholder="Last name" required maxlength="35" {% if form.is_bound %} value="{{ form.last_name.value}}{% endif %}">
+                  {% for error in form.last_name.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                  {% endfor %}
                 </div>
                 <div class="form-group col-md-4">
-                  <i class="fa fa-transgender-alt"></i> <label for="input-type">Gender *</label>
+                  <i class="fa fa-transgender-alt"></i> <label for="gender">Gender *</label>
                   <div id="input-type" class="row">
                     <div class="col-sm-2">
                       <label class="radio-inline">
-                          <input name="account_type" id="input-type-student" value="Student" type="radio" /> Male
+                          <input name="gender" id="male" value="Male" type="radio" {% if form.is_bound and form.gender.value == "Male" %} checked="checked" {% endif %} required /> Male
                       </label>
                     </div>
                     <div class="col-sm-2">
                       <label class="radio-inline">
-                          <input name="account_type" id="input-type-tutor" value="Tutor" type="radio" /> Female
+                          <input name="gender" id="female" value="Female" type="radio" {% if form.is_bound and form.gender.value == "Female" %} checked="checked" {% endif %} required/> Female
                       </label>
                     </div>
                   </div>
+                  {% for error in form.gender.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                  {% endfor %}
                 </div>
                 <div class="form-group col-md-4">
-                  <i class="fa fa-mobile"></i> <label for="mobile">Mobile *</label>
-                  <input type="text" class="form-control" id="mobile" placeholder="Mobile">
+                  <i class="fa fa-mobile"></i> <label>Mobile *</label>
+                  <input type="text" class="form-control" name="mobile" placeholder="Mobile" minlength="10" maxlength="10" required {% if form.is_bound %} value="{{ form.mobile.value}}{% endif %}">
+                  {% for error in form.mobile.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                  {% endfor %}
                 </div>
                 <div class="form-group col-md-4">
                   <i class="fa fa-calendar"></i> <label>Date of birth *</label>
                   <div class="input-group">
-                    <div class="input-group-addon">
-                      <i class="fa fa-calendar"></i>
-                    </div>
-                    <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" />
+                    <input id="dob" name="dob" type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" required {% if form.is_bound %} value="{{ form.dob.value}}{% endif %}" />
+                    <small id="dob-preview"></small><br>
+                    {% for error in form.dob.errors %}
+                      <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
                   </div>
                 </div>
                 <div class="form-group col-md-4">
-                  <i class="fa fa-user-circle"></i> <label for="age">Age</label>
-                  <input type="number" class="form-control" id="age" placeholder="Age">
+                  <i class="fa fa-user-circle"></i> <label>Age *</label>
+                  <input id="age" type="number" class="form-control" placeholder="Age"  required {% if form.is_bound %} value="{{ form.age.value}}{% endif %}">
+                  <small id="age-preview"></small>
+                  {% for error in form.age.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                  {% endfor %}
                 </div>
                 <div class="form-group col-md-3">
                   </div>
@@ -75,82 +96,127 @@
                   <div class="form-group col-md-4">
                     <label>Weight (kg)</label>
                     <div class="input-group" style="width: 100%">
-                      <input id="weight" type="range" min="0" max="120" step="0.5" value="0"/>
+                      <input id="weight" name="weight" type="range" min="0" max="120" step="0.5" {% if form.is_bound %} value="{{ form.weight.value}}" {% endif %} {% if form.is_bound is None %} value="0" {% endif %}"/>
                       <small id="weight_value"></small>
+                      {% for error in form.weight.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                      {% endfor %}
                     </div>
                   </div>
                   <div class="form-group col-md-4">
-                    <label>Height (ft.)</label>
+                    <label for="height">Height (ft.)</label>
                     <div class="input-group" style="width: 100%">
-                      <input id="height" type="range" min="0" max="8" step="0.1" value="0"/>
+                      <input id="height" name="height" type="range" min="0" max="8" step="0.1" {% if form.is_bound %} value="{{ form.height.value}}" {% endif %} {% if form.is_bound is None %} value="0.0" {% endif %}"/>
                       <small id="height_value"><b></b>Inchs</small>′
+                      {% for error in form.height.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                      {% endfor %}
                     </div>
                   </div>
                 </div>
                 <div class="form-group col-md-4">
-                  <i class="fa fa-building-o margin-r-5"></i> <label for="door">Door No.</label>
-                  <input type="text" class="form-control" id="door" placeholder="Door no, Apartment, studio, or floor">
+                  <i class="fa fa-building-o"></i> <label>Door No.</label>
+                  <input type="text" class="form-control" name="door" placeholder="Door no, Apartment, studio, or floor" {% if form.is_bound %} value="{{ form.door.value}} {% endif %}">
+                  {% for error in form.door.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                  {% endfor %}
                 </div>
                 <div class="form-group col-md-4">
-                  <i class="fa fa-street-view margin-r-5"></i> <label for="street">Street Name</label>
-                  <input type="text" class="form-control" id="street" placeholder="Street name">
+                  <i class="fa fa-street-view"></i> <label>Street Name</label>
+                  <input type="text" class="form-control" name="street" placeholder="Street name" {% if form.is_bound %} value="{{ form.street.value}}{% endif %}">
+                  {% for error in form.street.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                  {% endfor %}
                 </div>
                 <div class="form-group col-md-4">
-                  <i class="fa fa-map-marker margin-r-5"></i> <label for="city">City</label>
-                  <input type="text" class="form-control" id="city" placeholder="City">
+                  <i class="fa fa-map-marker margin-r-5"></i> <label>City</label>
+                  <input type="text" class="form-control" name="city" placeholder="City" {% if form.is_bound %} value="{{ form.city.value}}{% endif %}">
+                  {% for error in form.city.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                  {% endfor %}
                 </div>
+<!--                <div class="form-row">-->
+                  <div class="form-group col-md-4">
+                    <i class="fa fa-map-marker margin-r-5"></i> <label>State</label>
+                    <select name="state" class="form-control select2" style="width: 100%;">
+                      {% if form.is_bound %} <option value="{{ form.state.value}}">{{ form.state.value}}</option> "{% endif %}
+                      <option value="Andhra Pradesh">Andhra Pradesh</option>
+                      <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                      <option value="Asom (Assam)">Asom (Assam)</option>
+                      <option value="Bihar">Bihar</option>
+                      <option value="Karnataka">Karnataka</option>
+                      <option value="Kerala">Kerala</option>
+                      <option value="Chhattisgarh">Chhattisgarh</option>
+                      <option value="Uttar Pradesh">Uttar Pradesh</option>
+                      <option value="Goa">Goa</option>
+                      <option value="Gujarat">Gujarat</option>
+                      <option value="Haryana">Haryana</option>
+                      <option value="Himachal Pradesh">Himachal Pradesh</option>
+                      <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                      <option value="Jharkhand">Jharkhand</option>
+                      <option value="West Bengal">West Bengal</option>
+                      <option value="Madhya Pradesh">Madhya Pradesh</option>
+                      <option value="Maharashtra">Maharashtra</option>
+                      <option value="Madhya Pradesh">Madhya Pradesh</option>
+                      <option value="Manipur">Manipur</option>
+                      <option value="Meghalaya">Meghalaya</option>
+                      <option value="Mizoram">Mizoram</option>
+                      <option value="Nagaland">Nagaland</option>
+                      <option value="Orissa">Orissa</option>
+                      <option value="Other">Other</option>
+                      <option value="APunjab">Punjab</option>
+                      <option value="Rajasthan">Rajasthan</option>
+                      <option value="Sikkim">Sikkim</option>
+                      <option value="Tamil Nadu">Tamil Nadu</option>
+                      <option value="Telangana">Telangana</option>
+                      <option value="Tripura">Tripura</option>
+                      <option value="Telangana">Telangana</option>
+                      <option value="Uttarakhand (Uttaranchal)">Uttarakhand (Uttaranchal)</option>
+                      <option value="Andaman and Nicobar">Andaman and Nicobar</option>
+                      <option value="Pondicherry">Pondicherry</option>
+                      <option value="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
+                      <option value="Daman and Diu">Daman and Diu</option>
+                      <option value="Delhi">Delhi</option>
+                      <option value="Chandigarh">Chandigarh</option>
+                      <option value="Lakshadweep">Lakshadweep</option>
+                    </select>
+                    {% for error in form.state.errors %}
+                      <small class="text-danger">{{error}}</small>
+                    {% endfor %}
+                  </div>
+                  <div class="form-group col-md-4">
+                    <i class="fa fa-map-pin margin-r-5"></i> <label>Pincode</label>
+                    <input type="text" class="form-control" name="pincode" {% if form.is_bound %} value="{{ form.pincode.value}}{% endif %}"/>
+                    {% for error in form.pincode.errors %}
+                      <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
+                  </div>
+<!--                </div>-->
                 <div class="form-row">
                   <div class="form-group col-md-4">
-                    <i class="fa fa-map-marker margin-r-5"></i> <label for="inputState">State</label>
-                    <select id="inputState" class="form-control">
-                      <option value="Andhra Pradesh">Andhra Pradesh</option>
-                      <option value="Andhra Pradesh">Arunachal Pradesh</option>
-                      <option value="Andhra Pradesh">Asom (Assam)</option>
-                      <option value="Andhra Pradesh">Bihar</option>
-                      <option value="Andhra Pradesh">Karnataka</option>
-                      <option value="Andhra Pradesh">Kerala</option>
-                      <option value="Andhra Pradesh">Chhattisgarh</option>
-                      <option value="Andhra Pradesh">Uttar Pradesh</option>
-                      <option value="Andhra Pradesh">Goa</option>
-                      <option value="Andhra Pradesh">Gujarat</option>
-                      <option value="Andhra Pradesh">Haryana</option>
-                      <option value="Andhra Pradesh">Himachal Pradesh</option>
-                      <option value="Andhra Pradesh">Jammu and Kashmir</option>
-                      <option value="Andhra Pradesh">Jharkhand</option>
-                      <option value="Andhra Pradesh">West Bengal</option>
-                      <option value="Andhra Pradesh">Madhya Pradesh</option>
-                      <option value="Andhra Pradesh">Maharashtra</option>
-                      <option value="Andhra Pradesh">Madhya Pradesh</option>
-                      <option value="Andhra Pradesh">Manipur</option>
-                      <option value="Andhra Pradesh">Meghalaya</option>
-                      <option value="Andhra Pradesh">Mizoram</option>
-                      <option value="Andhra Pradesh">Nagaland</option>
-                      <option value="Andhra Pradesh">Orissa</option>
-                      <option value="Andhra Pradesh">Other</option>
-                      <option value="Andhra Pradesh">Punjab</option>
-                      <option value="Andhra Pradesh">Rajasthan</option>
-                      <option value="Andhra Pradesh">Sikkim</option>
-                      <option value="Andhra Pradesh">Tamil Nadu</option>
-                      <option value="Andhra Pradesh">Telangana</option>
-                      <option value="Andhra Pradesh">Tripura</option>
-                      <option value="Andhra Pradesh">Telangana</option>
-                      <option value="Andhra Pradesh">Uttarakhand (Uttaranchal)</option>
-                      <option value="Andhra Pradesh">Andaman and Nicobar</option>
-                      <option value="Andhra Pradesh">Pondicherry</option>
-                      <option value="Andhra Pradesh">Dadra and Nagar Haveli</option>
-                      <option value="Andhra Pradesh">Daman and Diu</option>
-                      <option value="Andhra Pradesh">Delhi</option>
-                      <option value="Andhra Pradesh">Chandigarh</option>
-                      <option value="Andhra Pradesh">Lakshadweep</option>
+                    <i class="fa fa-bullhorn margin-r-5"></i> <label>Referral</label>
+                    <select name="referral" class="form-control select2" style="width: 100%;">
+                      {% if form.is_bound %} <option value="{{ form.referral.value}}">{{ form.referral.value}}</option> "{% endif %}
+                      <option value="">None</option>
+                      <option value="Vamsi">Vamsi</option>
+                      <option value="Royal">Royal</option>
+                      <option value="Krishna">Krishna</option>
+                      <option value="Sai">Sai</option>
                     </select>
-                  </div>
-                  <div class="form-group col-md-4">
-                    <i class="fa fa-map-pin margin-r-5"></i> <label for="pincode">Pincode</label>
-                    <input type="text" class="form-control" id="pincode">
+                    {% for error in form.referral.errors %}
+                      <small class="text-danger">{{error}}</small>
+                    {% endfor %}
                   </div>
                 </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-sticky-note margin-r-5"></i> <label>Notes</label>
+                  <textarea class="form-control" name="notes" placeholder="Write important notes here...." {% if form.is_bound %} value="{{ form.notes.value}}{% endif %}"></textarea>
+                  {% for error in form.notes.errors %}
+                    <small class="text-danger">{{error}}</small>
+                  {% endfor %}
+                </div>
                 <div class="form-group col-md-12">
-                  <button type="submit" class="btn btn-primary">Sign in</button>
+                  <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
               </form>
             </div>
@@ -170,7 +236,7 @@
                   </div>
                 </div>
               </div>
-              <input type=button style="display: block; margin-right: auto; margin-left: auto;" class="btn btn-default" value="Take Snapshot" onClick="take_snapshot()">
+              <input type=button style="display: block; margin-right: auto; margin-left: auto;" class="btn btn-default" value="Take Snapshot" onClick="take_snapshot()" required>
             </div>
             <!-- /.box-body -->
           </div>
@@ -193,7 +259,53 @@
       height_output.innerHTML = this.value;
     }
   </script>
-  <script type="text/javascript" src="{% static "js/webcam.min.js" %}"></script>
+  <script>
+  $(function() {
+    $('.select2').select2();
+    $('#dob').datepicker({
+       endDate: moment().subtract(180, 'days').format('YYYY-MM-DD'),
+      format: 'yyyy-mm-dd',
+      autoclose: true
+      });
+    });
+  </script>
+  <script>
+    $(document).on('change', '#dob', function() {
+      $("#dob-preview").text(
+        moment(dob.value).format('MMMM Do, YYYY')
+      );
+      var today = moment();
+      var year = moment(dob.value, 'YYYY');
+      var diff = today.diff(year, 'years')
+      $("#age-preview").text(
+        diff + ' years'
+      );
+      age.value = diff;
+    });
+    $(document).ready(function() {
+      if($("#dob").val().length > 0) {
+        $("#dob-preview").text(
+          moment($("#dob").val()).format('MMMM Do, YYYY')
+        );
+        var today = moment();
+        var year = moment(dob.value, 'YYYY');
+        var diff = today.diff(year, 'years')
+        $("#age-preview").text(
+          diff + ' years'
+        );
+        age.value = diff;
+      }
+    });
+  </script>
+  <script>
+      $(document).on('change', '#age', function() {
+        var agediff = moment().subtract(age.value, 'years').format('YYYY-MM-DD')
+        $("#dob").val(
+          agediff
+        );
+      });
+    </script>
+  <script type="text/javascript" src="{% static 'js/webcam.min.js' %}"></script>
 	<!-- Configure a few settings and attach camera -->
 	<script type="text/javascript">
 		Webcam.set({
@@ -208,7 +320,8 @@
   <script type="text/javascript">
 		function take_snapshot() {
 			Webcam.snap( function(data_uri) {
-				document.getElementById('picture').src = data_uri;
+				document.getElementById('preview').src = data_uri;
+				document.getElementById('picture').value = data_uri;
 			} );
 		}
 	</script>
