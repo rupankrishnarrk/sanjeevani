@@ -69,8 +69,8 @@ class PatientProfileModel(models.Model):
     createdDate = models.DateTimeField(auto_now_add=True)
     modifiedDate = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.first_name
+    def get_full_name(self):
+        return f"{self.first_name} {self.last_name}"
 
     class Meta:
         verbose_name = "Patient Profile Record"

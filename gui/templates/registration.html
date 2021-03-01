@@ -198,10 +198,9 @@
                     <select name="referral" class="form-control select2" style="width: 100%;">
                       {% if form.is_bound %} <option value="{{ form.referral.value}}">{{ form.referral.value}}</option> "{% endif %}
                       <option value="">None</option>
-                      <option value="Vamsi">Vamsi</option>
-                      <option value="Royal">Royal</option>
-                      <option value="Krishna">Krishna</option>
-                      <option value="Sai">Sai</option>
+                      {% for i in my_referrals %}
+                        <option value={{ i.id }}>{{ i.mobile }}</option>
+                      {% endfor %}
                     </select>
                     {% for error in form.referral.errors %}
                       <small class="text-danger">{{error}}</small>
