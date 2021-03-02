@@ -33,7 +33,7 @@ class PageNotFoundView(TemplateView):
 
 
 class PatientProfileCreateView(LoginRequiredMixin, FormView):
-    template_name = "registration.html"
+    template_name = "patient-create.html"
     form_class = forms.RegistrationForm
     # success_url = reverse_lazy('gui:home')
 
