@@ -197,9 +197,8 @@
                   <div class="form-group col-md-4">
                     <i class="fa fa-bullhorn margin-r-5"></i> <label>Referral</label>
                     <select name="referral" class="form-control select2" style="width: 100%;">
-                      {% if form.is_bound %} <option value="{{ form.referral.value }}">{{ form.referral.value}}</option>
+                      {% if form.is_bound %} <option value="{{ form.referral.value }}">{{ form.referral.value }}</option>
                       {% else %} <option value="{{ data.referral.id }}">{{ data.referral.mobile }}</option> {% endif %}
-                      <option value="">None</option>
                       {% for i in my_referrals %}
                         <option value={{ i.id }}>{{ i.mobile }}</option>
                       {% endfor %}

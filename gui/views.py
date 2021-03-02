@@ -15,9 +15,6 @@ class Home(LoginRequiredMixin, TemplateView):
         return render(request, self.template_name, {})
 
 
-
-
-
 class Profile(LoginRequiredMixin, TemplateView):
     template_name = "profile.html"
 
@@ -48,7 +45,8 @@ class PatientProfileCreateView(LoginRequiredMixin, FormView):
             form.save(createdBy=request.user)
             return redirect('gui:home')
         print(form.errors)
-        return render(request, self.template_name, {'form': form})
+        my_referrals = models.PatientProfileModel.objects.all().values('mobile','id')
+        return render(request, self.template_name, {'form': form, 'my_referrals': my_referrals})
 
 
 class PatientProfileUpdateView(LoginRequiredMixin, UpdateView):
@@ -69,4 +67,5 @@ class PatientProfileUpdateView(LoginRequiredMixin, UpdateView):
             form.save(createdBy=createdBy, modifiedBy=request.user)
             return redirect('gui:home')
         print(form.errors)
-        return render(request, self.template_name, {'form': form})
+        my_referrals = models.PatientProfileModel.objects.all().values('mobile','id')
+        return render(request, self.template_name, {'form': form, 'my_referrals': my_referrals})

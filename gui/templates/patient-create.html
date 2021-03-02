@@ -26,7 +26,7 @@
               <form method="post" autocomplete="off" enctype="multipart/form-data">{% csrf_token %}
                 <div class="form-row">
                   <div class="form-group col-md-3">
-                    <img id="preview" class="img-thumbnail" width="200px" height="150px" {% if form.is_bound %} src="{{ form.picture.value }}" {% else %} src="{% static "img/picture.png" %}" {% endif %}/>
+                    <img id="preview" class="img-thumbnail" width="200px" height="150px" {% if form.is_bound %} src="{{ form.picture.value }}" {% else %} src="{% static 'img/picture.png' %}" {% endif %}/>
                     <textarea id="picture" name="picture" hidden> {% if form.is_bound %} {{ form.picture.value }} {% else %} {{ profile_base64 }} {% endif %}</textarea>
                     {% for error in form.picture.errors %}
                       <small class="text-danger">{{ error }}</small>
@@ -35,14 +35,14 @@
                 </div>
                 <div class="form-group col-md-4">
                   <i class="fa fa-user"></i> <label>First name *</label>
-                  <input type="text" class="form-control" name="first_name" placeholder="First name" required minlength="3" maxlength="12" {% if form.is_bound %} value="{{ form.first_name.value}}{% endif %}">
+                  <input type="text" class="form-control" name="first_name" placeholder="First name" required minlength="3" maxlength="12" {% if form.is_bound %} value="{{ form.first_name.value }}{% endif %}">
                   {% for error in form.first_name.errors %}
                     <small class="text-danger">{{ error }}</small>
                   {% endfor %}
                 </div>
                 <div class="form-group col-md-4">
                   <i class="fa fa-user"></i> <label>Last name *</label>
-                  <input type="text" class="form-control" name="last_name" placeholder="Last name" required maxlength="35" {% if form.is_bound %} value="{{ form.last_name.value}}{% endif %}">
+                  <input type="text" class="form-control" name="last_name" placeholder="Last name" required maxlength="35" {% if form.is_bound %} value="{{ form.last_name.value }}{% endif %}">
                   {% for error in form.last_name.errors %}
                     <small class="text-danger">{{ error }}</small>
                   {% endfor %}
@@ -67,7 +67,7 @@
                 </div>
                 <div class="form-group col-md-4">
                   <i class="fa fa-mobile"></i> <label>Mobile *</label>
-                  <input type="text" class="form-control" name="mobile" placeholder="Mobile" minlength="10" maxlength="10" required {% if form.is_bound %} value="{{ form.mobile.value}}{% endif %}">
+                  <input type="text" class="form-control" name="mobile" placeholder="Mobile" minlength="10" maxlength="10" required {% if form.is_bound %} value="{{ form.mobile.value }} {% endif %}">
                   {% for error in form.mobile.errors %}
                     <small class="text-danger">{{ error }}</small>
                   {% endfor %}
@@ -75,7 +75,7 @@
                 <div class="form-group col-md-4">
                   <i class="fa fa-calendar"></i> <label>Date of birth *</label>
                   <div class="input-group">
-                    <input id="dob" name="dob" type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" required {% if form.is_bound %} value="{{ form.dob.value}}{% endif %}" />
+                    <input id="dob" name="dob" type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" required {% if form.is_bound %} value="{{ form.dob.value }} {% endif %}" />
                     <small id="dob-preview"></small><br>
                     {% for error in form.dob.errors %}
                       <small class="text-danger">{{ error }}</small>
@@ -84,7 +84,7 @@
                 </div>
                 <div class="form-group col-md-4">
                   <i class="fa fa-user-circle"></i> <label>Age *</label>
-                  <input id="age" type="number" class="form-control" placeholder="Age"  required {% if form.is_bound %} value="{{ form.age.value}}{% endif %}">
+                  <input id="age" type="number" class="form-control" placeholder="Age"  required {% if form.is_bound %} value="{{ form.age.value }} {% endif %}">
                   <small id="age-preview"></small>
                   {% for error in form.age.errors %}
                     <small class="text-danger">{{ error }}</small>
@@ -116,7 +116,7 @@
                 </div>
                 <div class="form-group col-md-4">
                   <i class="fa fa-building-o"></i> <label>Door No.</label>
-                  <input type="text" class="form-control" name="door" placeholder="Door no, Apartment, studio, or floor" {% if form.is_bound %} value="{{ form.door.value}}" {% endif %}>
+                  <input type="text" class="form-control" name="door" placeholder="Door no, Apartment, studio, or floor" {% if form.is_bound %} value="{{ form.door.value }}" {% endif %}>
                   {% for error in form.door.errors %}
                     <small class="text-danger">{{ error }}</small>
                   {% endfor %}
@@ -139,7 +139,7 @@
                   <div class="form-group col-md-4">
                     <i class="fa fa-map-marker margin-r-5"></i> <label>State</label>
                     <select name="state" class="form-control select2" style="width: 100%;">
-                      {% if form.is_bound %} <option value="{{ form.state.value}}">{{ form.state.value}}</option> "{% endif %}
+                      {% if form.is_bound %} <option value="{{ form.state.value }}">{{ form.state.value }}</option> "{% endif %}
                       <option value="Andhra Pradesh">Andhra Pradesh</option>
                       <option value="Arunachal Pradesh">Arunachal Pradesh</option>
                       <option value="Asom (Assam)">Asom (Assam)</option>
@@ -186,7 +186,7 @@
                   </div>
                   <div class="form-group col-md-4">
                     <i class="fa fa-map-pin margin-r-5"></i> <label>Pincode</label>
-                    <input type="text" class="form-control" name="pincode" {% if form.is_bound %} value="{{ form.pincode.value}}" {% endif %} />
+                    <input type="text" class="form-control" name="pincode" {% if form.is_bound %} value="{{ form.pincode.value }}" {% endif %} />
                     {% for error in form.pincode.errors %}
                       <small class="text-danger">{{ error }}</small>
                     {% endfor %}
@@ -203,13 +203,13 @@
                       {% endfor %}
                     </select>
                     {% for error in form.referral.errors %}
-                      <small class="text-danger">{{error}}</small>
+                      <small class="text-danger">{{ error }}</small>
                     {% endfor %}
                   </div>
                 </div>
                 <div class="form-group col-md-4">
                   <i class="fa fa-sticky-note margin-r-5"></i> <label>Notes</label>
-                  <textarea class="form-control" name="notes" placeholder="Write important notes here...." {% if form.is_bound %} value="{{ form.notes.value}}{% endif %}"></textarea>
+                  <textarea class="form-control" name="notes" placeholder="Write important notes here...." {% if form.is_bound %} value="{{ form.notes.value }} {% endif %}"></textarea>
                   {% for error in form.notes.errors %}
                     <small class="text-danger">{{error}}</small>
                   {% endfor %}
