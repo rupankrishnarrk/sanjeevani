@@ -20,6 +20,7 @@ from gui import views
 app_name = "gui"
 
 urlpatterns = [
+    path('api/search/patient/', views.PatientSearchView.as_view(), name="patient-search"),
     path('home/', views.Home.as_view(), name="home"),
     path('profile/', views.Profile.as_view(), name="profile"),
     path('pagenotfound/', views.PageNotFoundView.as_view(), name="pagenotfound"),

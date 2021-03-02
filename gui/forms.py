@@ -16,6 +16,12 @@ class RegistrationForm(forms.ModelForm):
             raise forms.ValidationError('Age must be more than 6 months')
         return dob
 
+    def clean_referral(self):
+        if bool(self.cleaned_data['referral']):
+            if self.instance.id == self.cleaned_data['referral'].id:
+                raise forms.ValidationError('Patient cannot be referral himself ')
+        return self.cleaned_data['referral']
+
     def save(self, createdBy=None, modifiedBy=None):
         record = super(RegistrationForm, self).save(commit=False)
         record.createdBy = createdBy

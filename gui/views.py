@@ -6,6 +6,10 @@ from gui import forms
 from django.shortcuts import  redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
+from rest_framework import generics
+from rest_framework import response
+from rest_framework import status
+
 
 # Create your views here.
 class Home(LoginRequiredMixin, TemplateView):
@@ -45,8 +49,7 @@ class PatientProfileCreateView(LoginRequiredMixin, FormView):
             form.save(createdBy=request.user)
             return redirect('gui:home')
         print(form.errors)
-        my_referrals = models.PatientProfileModel.objects.all().values('mobile','id')
-        return render(request, self.template_name, {'form': form, 'my_referrals': my_referrals})
+        return render(request, self.template_name, {'form': form})
 
 
 class PatientProfileUpdateView(LoginRequiredMixin, UpdateView):
@@ -67,5 +70,12 @@ class PatientProfileUpdateView(LoginRequiredMixin, UpdateView):
             form.save(createdBy=createdBy, modifiedBy=request.user)
             return redirect('gui:home')
         print(form.errors)
-        my_referrals = models.PatientProfileModel.objects.all().values('mobile','id')
-        return render(request, self.template_name, {'form': form, 'my_referrals': my_referrals})
+        return render(request, self.template_name, {'form': form})
+
+class PatientSearchView(generics.GenericAPIView):
+
+    def get(self, request):
+        if request.is_ajax():
+            q = request.GET.get('q', '')
+            search = models.PatientProfileModel.objects.filter(mobile__contains=q).values('id', 'mobile')[:5]
+            return response.Response(search, status=status.HTTP_200_OK)
