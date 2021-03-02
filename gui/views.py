@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from gui import  models
-from django.views.generic.edit import CreateView, FormView
+from django.views.generic.edit import CreateView, FormView, UpdateView
 from gui import forms
 from django.shortcuts import  redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,6 +10,23 @@ from django.shortcuts import get_object_or_404
 # Create your views here.
 class Home(LoginRequiredMixin, TemplateView):
     template_name = "home.html"
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {})
+
+
+
+
+
+class Profile(LoginRequiredMixin, TemplateView):
+    template_name = "profile.html"
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {})
+
+
+class PageNotFoundView(TemplateView):
+    template_name = "404.html"
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {})
@@ -34,21 +51,7 @@ class PatientProfileCreateView(LoginRequiredMixin, FormView):
         return render(request, self.template_name, {'form': form})
 
 
-class Profile(LoginRequiredMixin, TemplateView):
-    template_name = "profile.html"
-
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, {})
-
-
-class PageNotFoundView(TemplateView):
-    template_name = "404.html"
-
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, {})
-
-
-class PatientProfileUpdateView(LoginRequiredMixin, FormView):
+class PatientProfileUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "patient-update.html"
     form_class = forms.RegistrationForm
     # success_url = reverse_lazy('gui:home')
@@ -59,9 +62,11 @@ class PatientProfileUpdateView(LoginRequiredMixin, FormView):
         return render(request, self.template_name, {'my_referrals': my_referrals, 'data': data})
 
     def post(self, request, *args, **kwargs):
-        form = forms.RegistrationForm(request.POST)
+        data = get_object_or_404(models.PatientProfileModel, pk=kwargs['id'])
+        form = forms.RegistrationForm(request.POST, instance=data)
+        createdBy = data.createdBy
         if form.is_valid():
-            form.save(createdBy=request.user)
+            form.save(createdBy=createdBy, modifiedBy=request.user)
             return redirect('gui:home')
         print(form.errors)
         return render(request, self.template_name, {'form': form})

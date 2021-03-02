@@ -16,8 +16,8 @@ class RegistrationForm(forms.ModelForm):
             raise forms.ValidationError('Age must be more than 6 months')
         return dob
 
-    def save(self, createdBy=None):
+    def save(self, createdBy=None, modifiedBy=None):
         record = super(RegistrationForm, self).save(commit=False)
-        if createdBy:
-            record.createdBy = createdBy
+        record.createdBy = createdBy
+        record.modifiedBy = modifiedBy
         record.save()

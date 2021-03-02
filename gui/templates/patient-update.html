@@ -26,8 +26,8 @@
               <form method="post" autocomplete="off" enctype="multipart/form-data">{% csrf_token %}
                 <div class="form-row">
                   <div class="form-group col-md-3">
-                    <img id="preview" class="img-thumbnail" width="200px" height="150px" {% if form.is_bound %} src="{{ form.picture.value}} {% else %} src="{{ data.picture }}" {% endif %}"/>
-                    <textarea id="picture" name="picture" hidden> {% if form.is_bound %} {{ form.picture.value}} {% else %} {{ data.picture }} {% endif %}</textarea>
+                    <img id="preview" class="img-thumbnail" width="200px" height="150px" {% if form.is_bound %} src='{{ form.picture.value }}' {% else %} src='{{ data.picture }}' {% endif %}/>
+                    <textarea id="picture" name="picture" hidden> {% if form.is_bound %} {{ form.picture.value }} {% else %} {{ data.picture }} {% endif %}</textarea>
                     {% for error in form.picture.errors %}
                       <small class="text-danger">{{ error }}</small>
                     {% endfor %}
@@ -35,7 +35,7 @@
                 </div>
                 <div class="form-group col-md-4">
                   <i class="fa fa-user"></i> <label>First name *</label>
-                  <input type="text" class="form-control" name="first_name" placeholder="First name" required minlength="3" maxlength="12"  {% if form.is_bound %} value="{{ form.first_name.value }}" {% else %} value="{{ data.first_name }}" {% endif %}">
+                  <input type="text" class="form-control" name="first_name" placeholder="First name" required minlength="3" maxlength="12"  {% if form.is_bound %} value="{{ form.first_name.value }}" {% else %} value="{{ data.first_name }}" {% endif %}>
                   {% for error in form.first_name.errors %}
                     <small class="text-danger">{{ error }}</small>
                   {% endfor %}
@@ -48,7 +48,7 @@
                   {% endfor %}
                 </div>
                 <div class="form-group col-md-4">
-                  <i class="fa fa-transgender-alt"></i> <label for="gender">Gender *</label>
+                  <i class="fa fa-transgender-alt"></i> <label for='gender'>Gender *</label>
                   <div id="input-type" class="row">
                     <div class="col-sm-2">
                       <label class="radio-inline">
@@ -57,7 +57,7 @@
                     </div>
                     <div class="col-sm-2">
                       <label class="radio-inline">
-                          <input name="gender" id="female" value="Female" type="radio" {% if form.is_bound and form.gender.value == "Female" %} checked="checked" {% elif data.gender == "Male" %} checked="checked" {% endif %} required/> Female
+                          <input name="gender" id="female" value="Female" type="radio" {% if form.is_bound and form.gender.value == 'Female' %} checked="checked" {% elif data.gender == 'Female' %} checked="checked" {% endif %} required/> Female
                       </label>
                     </div>
                   </div>
@@ -67,7 +67,7 @@
                 </div>
                 <div class="form-group col-md-4">
                   <i class="fa fa-mobile"></i> <label>Mobile *</label>
-                  <input type="text" class="form-control" name="mobile" placeholder="Mobile" minlength="10" maxlength="10" required {% if form.is_bound %} value="{{ form.mobile.value}}" {% else %} value="{{ data.mobile }}" {% endif %}>
+                  <input type="text" class="form-control" name="mobile" placeholder="Mobile" minlength="10" maxlength="10" required {% if form.is_bound %} value="{{ form.mobile.value }}" {% else %} value="{{ data.mobile }}" {% endif %}>
                   {% for error in form.mobile.errors %}
                     <small class="text-danger">{{ error }}</small>
                   {% endfor %}
@@ -75,7 +75,7 @@
                 <div class="form-group col-md-4">
                   <i class="fa fa-calendar"></i> <label>Date of birth *</label>
                   <div class="input-group">
-                    <input id="dob" name="dob" type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" required {% if form.is_bound %} value="{{ form.dob.value}} {% else %} value="{{ data.dob|date:"Y-m-d" }}" {% endif %}" />
+                    <input id="dob" name="dob" type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" required {% if form.is_bound %} value="{{ form.dob.value }}" {% else %} value="{{ data.dob|date:'Y-m-d' }}" {% endif %} />
                     <small id="dob-preview"></small><br>
                     {% for error in form.dob.errors %}
                       <small class="text-danger">{{ error }}</small>
@@ -96,7 +96,7 @@
                   <div class="form-group col-md-4">
                     <label>Weight (kg)</label>
                     <div class="input-group" style="width: 100%">
-                      <input id="weight" name="weight" type="range" min="0" max="120" step="0.5" {% if form.is_bound %} value="{{ form.weight.value}}" {% else %} value="{{data.weight}}" {% endif %} {% if form.is_bound is None %} value="0" {% endif %}"/>
+                      <input id="weight" name="weight" type="range" min="0" max="120" step="0.5" {% if form.is_bound %} value="{{ form.weight.value }}" {% else %} value="{{ data.weight }}" {% endif %} {% if form.is_bound is None %} value="0" {% endif %}/>
                       <small id="weight_value"></small>
                       {% for error in form.weight.errors %}
                         <small class="text-danger">{{ error }}</small>
@@ -106,7 +106,7 @@
                   <div class="form-group col-md-4">
                     <label for="height">Height (ft.)</label>
                     <div class="input-group" style="width: 100%">
-                      <input id="height" name="height" type="range" min="0" max="8" step="0.1" {% if form.is_bound %} value="{{ form.height.value}}" {% else %} value="{{data.height}}" {% endif %} {% if form.is_bound is None %} value="0.0" {% endif %}"/>
+                      <input id="height" name="height" type="range" min="0" max="8" step="0.1" {% if form.is_bound %} value="{{ form.height.value }}" {% else %} value="{{ data.height }}" {% endif %} {% if form.is_bound is None %} value="0.0" {% endif %}/>
                       <small id="height_value"><b></b>Inchs</small>′
                       {% for error in form.height.errors %}
                         <small class="text-danger">{{ error }}</small>
@@ -116,21 +116,21 @@
                 </div>
                 <div class="form-group col-md-4">
                   <i class="fa fa-building-o"></i> <label>Door No.</label>
-                  <input type="text" class="form-control" name="door" placeholder="Door no, Apartment, studio, or floor" {% if form.is_bound %} value="{{ form.door.value}}" {% else %} value= "{{ data.door }}" {% endif %}>
+                  <input type="text" class="form-control" name="door" placeholder="Door no, Apartment, studio, or floor" {% if form.is_bound %} value="{{ form.door.value}}" {% else %} value= "{{ data.door | default_if_none:'' }}" {% endif %}>
                   {% for error in form.door.errors %}
                     <small class="text-danger">{{ error }}</small>
                   {% endfor %}
                 </div>
                 <div class="form-group col-md-4">
                   <i class="fa fa-street-view"></i> <label>Street Name</label>
-                  <input type="text" class="form-control" name="street" placeholder="Street name" {% if form.is_bound %} value="{{ form.street.value}} {% else %} value="{{ data.street }}" {% endif %}">
+                  <input type="text" class="form-control" name="street" placeholder="Street name" {% if form.is_bound %} value="{{ form.street.value }}" {% else %} value="{{ data.street | default_if_none:'' }}" {% endif %}>
                   {% for error in form.street.errors %}
                     <small class="text-danger">{{ error }}</small>
                   {% endfor %}
                 </div>
                 <div class="form-group col-md-4">
                   <i class="fa fa-map-marker margin-r-5"></i> <label>City</label>
-                  <input type="text" class="form-control" name="city" placeholder="City" {% if form.is_bound %} value="{{ form.city.value }} {% else %} value="{{ data.city }}" {% endif %}">
+                  <input type="text" class="form-control" name="city" placeholder="City" {% if form.is_bound %} value="{{ form.city.value }}" {% else %} value="{{ data.city | default_if_none:'' }}" {% endif %}>
                   {% for error in form.city.errors %}
                     <small class="text-danger">{{ error }}</small>
                   {% endfor %}
@@ -187,7 +187,7 @@
                   </div>
                   <div class="form-group col-md-4">
                     <i class="fa fa-map-pin margin-r-5"></i> <label>Pincode</label>
-                    <input type="text" class="form-control" name="pincode" {% if form.is_bound %} value="{{ form.pincode.value }}" {% else %} value="{{ data.pincode }}"{% endif %}"/>
+                    <input type="text" class="form-control" placeholder="Pincode" name="pincode" {% if form.is_bound %} value="{{ form.pincode.value }}" {% else %} value="{{ data.pincod | default_if_none:'' }}" {% endif %}/>
                     {% for error in form.pincode.errors %}
                       <small class="text-danger">{{ error }}</small>
                     {% endfor %}
@@ -211,13 +211,13 @@
                 </div>
                 <div class="form-group col-md-4">
                   <i class="fa fa-sticky-note margin-r-5"></i> <label>Notes</label>
-                  <textarea class="form-control" name="notes" placeholder="Write important notes here...." {% if form.is_bound %} value="{{ form.notes.value }}" {% else %} value="{{ data.note }}"{% endif %}></textarea>
+                  <textarea class="form-control" name="notes" placeholder="Write important notes here....">{% if form.is_bound %} {{ form.notes.value }} {% else %} {{ data.notes }} {% endif %}</textarea>
                   {% for error in form.notes.errors %}
                     <small class="text-danger">{{error}}</small>
                   {% endfor %}
                 </div>
                 <div class="form-group col-md-12">
-                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="submit" class="btn btn-primary">Update</button>
                 </div>
               </form>
             </div>
