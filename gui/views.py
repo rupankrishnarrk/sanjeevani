@@ -1,13 +1,11 @@
 from django.shortcuts import render
-from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from gui import  models
 from django.views.generic.edit import CreateView, FormView
-from django.views.generic import View
 from gui import forms
 from django.shortcuts import  redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 class Home(LoginRequiredMixin, TemplateView):
@@ -17,7 +15,7 @@ class Home(LoginRequiredMixin, TemplateView):
         return render(request, self.template_name, {})
 
 
-class PatientProfileView(LoginRequiredMixin, FormView):
+class PatientProfileCreateView(LoginRequiredMixin, FormView):
     template_name = "registration.html"
     form_class = forms.RegistrationForm
     # success_url = reverse_lazy('gui:home')
@@ -43,3 +41,27 @@ class Profile(LoginRequiredMixin, TemplateView):
         return render(request, self.template_name, {})
 
 
+class PageNotFoundView(TemplateView):
+    template_name = "404.html"
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {})
+
+
+class PatientProfileUpdateView(LoginRequiredMixin, FormView):
+    template_name = "patient-update.html"
+    form_class = forms.RegistrationForm
+    # success_url = reverse_lazy('gui:home')
+
+    def get(self, request, *args, **kwargs):
+        data = get_object_or_404(models.PatientProfileModel, pk=kwargs['id'])
+        my_referrals = models.PatientProfileModel.objects.all().values('mobile','id')
+        return render(request, self.template_name, {'my_referrals': my_referrals, 'data': data})
+
+    def post(self, request, *args, **kwargs):
+        form = forms.RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save(createdBy=request.user)
+            return redirect('gui:home')
+        print(form.errors)
+        return render(request, self.template_name, {'form': form})

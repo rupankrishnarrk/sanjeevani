@@ -1,0 +1,344 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  <div class="content-wrapper" style="min-height: 956px;">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        <i class="fa fa-user-plus"></i> Registration
+        <small>Patient</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">Registration</a></li>
+        <li class="active">Patient</li>
+      </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-md-9">
+          <div class="box box-primary">
+            <div class="box-header">
+              <h3 class="box-title">Patient Info</h3>
+            </div>
+            <div class="box-body">
+              <form method="post" autocomplete="off" enctype="multipart/form-data">{% csrf_token %}
+                <div class="form-row">
+                  <div class="form-group col-md-3">
+                    <img id="preview" class="img-thumbnail" width="200px" height="150px" {% if form.is_bound %} src="{{ form.picture.value}} {% else %} src="{{ data.picture }}" {% endif %}"/>
+                    <textarea id="picture" name="picture" hidden> {% if form.is_bound %} {{ form.picture.value}} {% else %} {{ data.picture }} {% endif %}</textarea>
+                    {% for error in form.picture.errors %}
+                      <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-user"></i> <label>First name *</label>
+                  <input type="text" class="form-control" name="first_name" placeholder="First name" required minlength="3" maxlength="12"  {% if form.is_bound %} value="{{ form.first_name.value }}" {% else %} value="{{ data.first_name }}" {% endif %}">
+                  {% for error in form.first_name.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                  {% endfor %}
+                </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-user"></i> <label>Last name *</label>
+                  <input type="text" class="form-control" name="last_name" placeholder="Last name" required maxlength="35" {% if form.is_bound %} value="{{ form.last_name.value }}" {% else %} value="{{ data.last_name}}" {% endif %}>
+                  {% for error in form.last_name.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                  {% endfor %}
+                </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-transgender-alt"></i> <label for="gender">Gender *</label>
+                  <div id="input-type" class="row">
+                    <div class="col-sm-2">
+                      <label class="radio-inline">
+                          <input name="gender" id="male" value="Male" type="radio" {% if form.is_bound and form.gender.value == "Male" %} checked="checked" {% elif data.gender == "Male" %} checked="checked" {% endif %} required /> Male
+                      </label>
+                    </div>
+                    <div class="col-sm-2">
+                      <label class="radio-inline">
+                          <input name="gender" id="female" value="Female" type="radio" {% if form.is_bound and form.gender.value == "Female" %} checked="checked" {% elif data.gender == "Male" %} checked="checked" {% endif %} required/> Female
+                      </label>
+                    </div>
+                  </div>
+                  {% for error in form.gender.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                  {% endfor %}
+                </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-mobile"></i> <label>Mobile *</label>
+                  <input type="text" class="form-control" name="mobile" placeholder="Mobile" minlength="10" maxlength="10" required {% if form.is_bound %} value="{{ form.mobile.value}}" {% else %} value="{{ data.mobile }}" {% endif %}>
+                  {% for error in form.mobile.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                  {% endfor %}
+                </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-calendar"></i> <label>Date of birth *</label>
+                  <div class="input-group">
+                    <input id="dob" name="dob" type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" required {% if form.is_bound %} value="{{ form.dob.value}} {% else %} value="{{ data.dob|date:"Y-m-d" }}" {% endif %}" />
+                    <small id="dob-preview"></small><br>
+                    {% for error in form.dob.errors %}
+                      <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-user-circle"></i> <label>Age *</label>
+                  <input id="age" type="number" class="form-control" placeholder="Age"  required {% if form.is_bound %} value="{{ form.age.value}}" {% else %} value="{{data.age}}" {% endif %}>
+                  <small id="age-preview"></small>
+                  {% for error in form.age.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                  {% endfor %}
+                </div>
+                <div class="form-group col-md-3">
+                  </div>
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label>Weight (kg)</label>
+                    <div class="input-group" style="width: 100%">
+                      <input id="weight" name="weight" type="range" min="0" max="120" step="0.5" {% if form.is_bound %} value="{{ form.weight.value}}" {% else %} value="{{data.weight}}" {% endif %} {% if form.is_bound is None %} value="0" {% endif %}"/>
+                      <small id="weight_value"></small>
+                      {% for error in form.weight.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label for="height">Height (ft.)</label>
+                    <div class="input-group" style="width: 100%">
+                      <input id="height" name="height" type="range" min="0" max="8" step="0.1" {% if form.is_bound %} value="{{ form.height.value}}" {% else %} value="{{data.height}}" {% endif %} {% if form.is_bound is None %} value="0.0" {% endif %}"/>
+                      <small id="height_value"><b></b>Inchs</small>′
+                      {% for error in form.height.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-building-o"></i> <label>Door No.</label>
+                  <input type="text" class="form-control" name="door" placeholder="Door no, Apartment, studio, or floor" {% if form.is_bound %} value="{{ form.door.value}}" {% else %} value= "{{ data.door }}" {% endif %}>
+                  {% for error in form.door.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                  {% endfor %}
+                </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-street-view"></i> <label>Street Name</label>
+                  <input type="text" class="form-control" name="street" placeholder="Street name" {% if form.is_bound %} value="{{ form.street.value}} {% else %} value="{{ data.street }}" {% endif %}">
+                  {% for error in form.street.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                  {% endfor %}
+                </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-map-marker margin-r-5"></i> <label>City</label>
+                  <input type="text" class="form-control" name="city" placeholder="City" {% if form.is_bound %} value="{{ form.city.value }} {% else %} value="{{ data.city }}" {% endif %}">
+                  {% for error in form.city.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                  {% endfor %}
+                </div>
+<!--                <div class="form-row">-->
+                  <div class="form-group col-md-4">
+                    <i class="fa fa-map-marker margin-r-5"></i> <label>State</label>
+                    <select name="state" class="form-control select2" style="width: 100%;">
+                      {% if form.is_bound %} <option value="{{ form.state.value }}">{{ form.state.value }}</option>
+                      {% else %} <option value="{{ data.state}}">{{ data.state }}</option> {% endif %}
+                      <option value="Andhra Pradesh">Andhra Pradesh</option>
+                      <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                      <option value="Asom (Assam)">Asom (Assam)</option>
+                      <option value="Bihar">Bihar</option>
+                      <option value="Karnataka">Karnataka</option>
+                      <option value="Kerala">Kerala</option>
+                      <option value="Chhattisgarh">Chhattisgarh</option>
+                      <option value="Uttar Pradesh">Uttar Pradesh</option>
+                      <option value="Goa">Goa</option>
+                      <option value="Gujarat">Gujarat</option>
+                      <option value="Haryana">Haryana</option>
+                      <option value="Himachal Pradesh">Himachal Pradesh</option>
+                      <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                      <option value="Jharkhand">Jharkhand</option>
+                      <option value="West Bengal">West Bengal</option>
+                      <option value="Madhya Pradesh">Madhya Pradesh</option>
+                      <option value="Maharashtra">Maharashtra</option>
+                      <option value="Madhya Pradesh">Madhya Pradesh</option>
+                      <option value="Manipur">Manipur</option>
+                      <option value="Meghalaya">Meghalaya</option>
+                      <option value="Mizoram">Mizoram</option>
+                      <option value="Nagaland">Nagaland</option>
+                      <option value="Orissa">Orissa</option>
+                      <option value="Other">Other</option>
+                      <option value="APunjab">Punjab</option>
+                      <option value="Rajasthan">Rajasthan</option>
+                      <option value="Sikkim">Sikkim</option>
+                      <option value="Tamil Nadu">Tamil Nadu</option>
+                      <option value="Telangana">Telangana</option>
+                      <option value="Tripura">Tripura</option>
+                      <option value="Telangana">Telangana</option>
+                      <option value="Uttarakhand (Uttaranchal)">Uttarakhand (Uttaranchal)</option>
+                      <option value="Andaman and Nicobar">Andaman and Nicobar</option>
+                      <option value="Pondicherry">Pondicherry</option>
+                      <option value="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
+                      <option value="Daman and Diu">Daman and Diu</option>
+                      <option value="Delhi">Delhi</option>
+                      <option value="Chandigarh">Chandigarh</option>
+                      <option value="Lakshadweep">Lakshadweep</option>
+                    </select>
+                    {% for error in form.state.errors %}
+                      <small class="text-danger">{{error}}</small>
+                    {% endfor %}
+                  </div>
+                  <div class="form-group col-md-4">
+                    <i class="fa fa-map-pin margin-r-5"></i> <label>Pincode</label>
+                    <input type="text" class="form-control" name="pincode" {% if form.is_bound %} value="{{ form.pincode.value }}" {% else %} value="{{ data.pincode }}"{% endif %}"/>
+                    {% for error in form.pincode.errors %}
+                      <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
+                  </div>
+<!--                </div>-->
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <i class="fa fa-bullhorn margin-r-5"></i> <label>Referral</label>
+                    <select name="referral" class="form-control select2" style="width: 100%;">
+                      {% if form.is_bound %} <option value="{{ form.referral.value}}">{{ form.referral.value}}</option>
+                      {% else %} <option value="{{ data.referral }}">{{ data.referral }}</option> {% endif %}
+                      <option value="">None</option>
+                      {% for i in my_referrals %}
+                        <option value={{ i.id }}>{{ i.mobile }}</option>
+                      {% endfor %}
+                    </select>
+                    {% for error in form.referral.errors %}
+                      <small class="text-danger">{{error}}</small>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="form-group col-md-4">
+                  <i class="fa fa-sticky-note margin-r-5"></i> <label>Notes</label>
+                  <textarea class="form-control" name="notes" placeholder="Write important notes here...." {% if form.is_bound %} value="{{ form.notes.value}}{% endif %}"></textarea>
+                  {% for error in form.notes.errors %}
+                    <small class="text-danger">{{error}}</small>
+                  {% endfor %}
+                </div>
+                <div class="form-group col-md-12">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </form>
+            </div>
+            <!-- /.box-body -->
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="box box-primary">
+            <div class="box-header">
+              <h3 class="box-title">Picture Preview</h3>
+            </div>
+
+            <div class="box-body" >
+              <div class="form-group">
+                <div class="c1">
+                  <div class="c2" id="camera">
+                  </div>
+                </div>
+              </div>
+              <input type=button style="display: block; margin-right: auto; margin-left: auto;" class="btn btn-default" value="Take Snapshot" onClick="take_snapshot()" required>
+            </div>
+            <!-- /.box-body -->
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.content -->
+  </div>
+  <script>
+    var weight = document.getElementById("weight");
+    var weight_output = document.getElementById("weight_value");
+    weight_output.innerHTML = weight.value;
+    weight.oninput = function() {
+      weight_output.innerText = this.value;
+    }
+    var height = document.getElementById("height");
+    var height_output = document.getElementById("height_value");
+    height_output.innerHTML = height.value;
+    height.oninput = function() {
+      height_output.innerHTML = this.value;
+    }
+  </script>
+  <script>
+  $(function() {
+    $('.select2').select2();
+    $('#dob').datepicker({
+       endDate: moment().subtract(180, 'days').format('YYYY-MM-DD'),
+      format: 'yyyy-mm-dd',
+      autoclose: true
+      });
+    });
+  </script>
+  <script>
+    $(document).on('change', '#dob', function() {
+      $("#dob-preview").text(
+        moment(dob.value).format('MMMM Do, YYYY')
+      );
+      var today = moment();
+      var year = moment(dob.value, 'YYYY');
+      var diff = today.diff(year, 'years')
+      $("#age-preview").text(
+        diff + ' years'
+      );
+      age.value = diff;
+    });
+    $(document).ready(function() {
+      if($("#dob").val().length > 0) {
+        $("#dob-preview").text(
+          moment($("#dob").val()).format('MMMM Do, YYYY')
+        );
+        var today = moment();
+        var year = moment(dob.value, 'YYYY');
+        var diff = today.diff(year, 'years')
+        $("#age-preview").text(
+          diff + ' years'
+        );
+        age.value = diff;
+      }
+    });
+  </script>
+  <script>
+      $(document).on('change', '#age', function() {
+        var agediff = moment().subtract(age.value, 'years').format('YYYY-MM-DD')
+        $("#dob").val(
+          agediff
+        );
+      });
+    </script>
+  <script type="text/javascript" src="{% static 'js/webcam.min.js' %}"></script>
+	<!-- Configure a few settings and attach camera -->
+	<script type="text/javascript">
+		Webcam.set({
+			width: 200,
+			height: 150,
+			image_format: 'jpeg',
+			jpeg_quality: 90,
+      force_flash: false
+		});
+		Webcam.attach( '#camera' );
+	</script>
+  <script type="text/javascript">
+		function take_snapshot() {
+			Webcam.snap( function(data_uri) {
+				document.getElementById('preview').src = data_uri;
+				document.getElementById('picture').value = data_uri;
+			} );
+		}
+	</script>
+  <style>
+  .c1 {
+    height: 200px;
+    position: relative;
+    border: 2px solid #3c8dbc;
+  }
+  .c2 {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+  </style>
+{% endblock content %}
