@@ -138,7 +138,7 @@
                 </div>
 <!--                <div class="form-row">-->
                   <div class="form-group col-md-4">
-                    <i class="fa fa-map-marker margin-r-5"></i> <label>State</label>
+                    <i class="fa fa-map-marker margin-r-5"></i> <label>State *</label>
                     <select name="state" class="form-control select2" style="width: 100%;">
                       {% if form.is_bound %} <option value="{{ form.state.value }}">{{ form.state.value }}</option>
                       {% else %} <option value="{{ data.state}}">{{ data.state }}</option> {% endif %}
@@ -166,7 +166,7 @@
                       <option value="Nagaland">Nagaland</option>
                       <option value="Orissa">Orissa</option>
                       <option value="Other">Other</option>
-                      <option value="APunjab">Punjab</option>
+                      <option value="Punjab">Punjab</option>
                       <option value="Rajasthan">Rajasthan</option>
                       <option value="Sikkim">Sikkim</option>
                       <option value="Tamil Nadu">Tamil Nadu</option>

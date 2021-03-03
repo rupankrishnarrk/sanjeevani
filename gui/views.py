@@ -58,12 +58,12 @@ class PatientProfileUpdateView(LoginRequiredMixin, UpdateView):
     # success_url = reverse_lazy('gui:home')
 
     def get(self, request, *args, **kwargs):
-        data = get_object_or_404(models.PatientProfileModel, pk=kwargs['id'])
+        data = get_object_or_404(models.PatientProfileModel, identifier=kwargs['identifier'])
         my_referrals = models.PatientProfileModel.objects.all().values('mobile','id')
         return render(request, self.template_name, {'my_referrals': my_referrals, 'data': data})
 
     def post(self, request, *args, **kwargs):
-        data = get_object_or_404(models.PatientProfileModel, pk=kwargs['id'])
+        data = get_object_or_404(models.PatientProfileModel, identifier=kwargs['identifier'])
         form = forms.RegistrationForm(request.POST, instance=data)
         createdBy = data.createdBy
         if form.is_valid():

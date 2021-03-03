@@ -75,7 +75,7 @@
                 <div class="form-group col-md-4">
                   <i class="fa fa-calendar"></i> <label>Date of birth *</label>
                   <div class="input-group">
-                    <input id="dob" name="dob" type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" required {% if form.is_bound %} value="{{ form.dob.value }} {% endif %}" />
+                    <input id="dob" name="dob" placeholder="YYYY-mm-dd" type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" required {% if form.is_bound %} value="{{ form.dob.value }} {% endif %}" />
                     <small id="dob-preview"></small><br>
                     {% for error in form.dob.errors %}
                       <small class="text-danger">{{ error }}</small>
@@ -137,9 +137,10 @@
                 </div>
 <!--                <div class="form-row">-->
                   <div class="form-group col-md-4">
-                    <i class="fa fa-map-marker margin-r-5"></i> <label>State</label>
+                    <i class="fa fa-map-marker margin-r-5"></i> <label>State *</label>
                     <select name="state" class="form-control select2" style="width: 100%;">
                       {% if form.is_bound %} <option value="{{ form.state.value }}">{{ form.state.value }}</option> "{% endif %}
+                      <option value=""></option>
                       <option value="Andhra Pradesh">Andhra Pradesh</option>
                       <option value="Arunachal Pradesh">Arunachal Pradesh</option>
                       <option value="Asom (Assam)">Asom (Assam)</option>
@@ -164,7 +165,7 @@
                       <option value="Nagaland">Nagaland</option>
                       <option value="Orissa">Orissa</option>
                       <option value="Other">Other</option>
-                      <option value="APunjab">Punjab</option>
+                      <option value="Punjab">Punjab</option>
                       <option value="Rajasthan">Rajasthan</option>
                       <option value="Sikkim">Sikkim</option>
                       <option value="Tamil Nadu">Tamil Nadu</option>
@@ -186,7 +187,7 @@
                   </div>
                   <div class="form-group col-md-4">
                     <i class="fa fa-map-pin margin-r-5"></i> <label>Pincode</label>
-                    <input type="text" class="form-control" name="pincode" {% if form.is_bound %} value="{{ form.pincode.value }}" {% endif %} />
+                    <input placeholder="517501" type="text" class="form-control" name="pincode" {% if form.is_bound %} value="{{ form.pincode.value }}" {% endif %} />
                     {% for error in form.pincode.errors %}
                       <small class="text-danger">{{ error }}</small>
                     {% endfor %}
@@ -269,6 +270,7 @@
     });
 
     $(document).ready(function() {
+      $('.select2').select2();
       $('.referral').select2({
         minimumInputLength: 5,
         maximumInputLength: 10,

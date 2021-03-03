@@ -5,7 +5,7 @@ from django.contrib.admin.utils import flatten_fieldsets
 
 # Register your models here.
 class PatientProfileAdmin(admin.ModelAdmin):
-    list_display = ['get_full_name', 'mobile', 'gender', 'createdDate', 'modifiedDate', 'createdBy', 'modifiedBy' ]
+    list_display = ['identifier', 'get_full_name', 'mobile', 'gender', 'createdDate', 'modifiedDate', 'createdBy', 'modifiedBy' ]
 
     def has_add_permission(self, request):
         return False

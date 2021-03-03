@@ -25,5 +25,5 @@ urlpatterns = [
     path('profile/', views.Profile.as_view(), name="profile"),
     path('pagenotfound/', views.PageNotFoundView.as_view(), name="pagenotfound"),
     path('patient/create/', views.PatientProfileCreateView.as_view(), name="patient-create"),
-    path('patient/update/<int:id>/', views.PatientProfileUpdateView.as_view(), name="patient-update"),
+    path('patient/update/<uuid:identifier>/', views.PatientProfileUpdateView.as_view(), name="patient-update"),
 ]

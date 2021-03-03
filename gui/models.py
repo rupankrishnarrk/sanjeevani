@@ -2,12 +2,14 @@ from django.db import models
 from django.core.validators import RegexValidator, \
     MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
+from uuid import uuid4
 
 
 # Create your models here.
 
 class PatientProfileModel(models.Model):
     id = models.AutoField(primary_key=True, editable=False)
+    identifier = models.UUIDField(default=uuid4, editable=False, unique=True)
     picture = models.TextField()
     first_name = models.CharField(max_length=12)
     last_name = models.CharField(max_length=35)
