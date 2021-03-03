@@ -24,4 +24,5 @@ urlpatterns = [
     path('', include('gui.urls', "gui")),
     path('login', LoginView.as_view(), name='login'),
     path('logout', LogoutView.as_view(), name='logout'),
+    path('nested_admin/', include('nested_admin.urls'))
 ]

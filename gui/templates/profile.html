@@ -20,21 +20,21 @@
           <!-- Profile Image -->
           <div class="box box-primary">
             <div class="box-body box-profile">
-              <img class="profile-user-img img-responsive img-circle" src="{% static "img/user4-128x128.jpg" %}" alt="User profile picture">
-              <h3 class="profile-username text-center">Vamsi Krishna</h3>
-              <p class="text-muted text-center">30002</p>
+              <img class="profile-user-img img-responsive img-circle" width="160px" height="160px" src="{{ patient_data.picture }}">
+              <h3 class="profile-username text-center">{{ patient_data.get_full_name }}</h3> <i
+              <p class="text-muted text-center">{{ patient_data.id }}</p>
               <ul class="list-group list-group-unbordered">
                 <li class="list-group-item">
-                  <i class="fa fa-mobile"></i> <b>Mobile</b> <a class="pull-right">8143240240</a>
+                  <i class="fa fa-mobile"></i> <b>Mobile</b> <a class="pull-right">{{ patient_data.mobile }}</a>
                 </li>
                 <li class="list-group-item">
-                  <i class="fa fa-transgender"></i> <b>Gender</b> <a class="pull-right">Male</a>
+                  <i class="fa fa-transgender"></i> <b>Gender</b> <a class="pull-right">{{ patient_data.gender }}</a>
                 </li>
                 <li class="list-group-item">
-                  <i class="fa fa-birthday-cake"></i> <b>DOB</b> <a class="pull-right">Januray 01 1989</a>
+                  <i class="fa fa-birthday-cake"></i> <b>DOB</b> <a class="pull-right">{{ patient_data.dob }}</a>
                 </li>
                 <li class="list-group-item">
-                  <i class="fa fa-user"></i> <b>Age</b> <a class="pull-right">30 Years</a>
+                  <i class="fa fa-user"></i> <b>Age</b> <a class="pull-right">{{ patient_data.dob }}</a>
                 </li>
               </ul>
             </div>
@@ -50,13 +50,13 @@
             <div class="box-body box-profile">
               <ul class="list-group list-group-unbordered">
                 <li class="list-group-item">
-                  <i class="fa fa-user-circle"></i> <b>Weight</b> <a class="pull-right">70</a>
+                  <i class="fa fa-user-circle"></i> <b>Weight</b> <a class="pull-right">{{ patient_data.weight }}</a>
                 </li>
                 <li class="list-group-item">
-                  <i class="fa fa-arrows-v"></i> <b>Height</b> <a class="pull-right">5.6"</a>
+                  <i class="fa fa-arrows-v"></i> <b>Height</b> <a class="pull-right">{{ patient_data.height }}</a>
                 </li>
                 <li class="list-group-item">
-                  <i class="fa fa-heartbeat"></i> <b>BMI</b> <a class="pull-right">240</a>
+                  <i class="fa fa-heartbeat"></i> <b>BMI</b> <a class="pull-right">000</a>
                 </li>
                 <li class="list-group-item">
                   <i class="fa fa-remove"></i> <b>Allergies</b>
@@ -82,20 +82,20 @@
             <div class="box-body">
               <strong><i class="fa fa-building-o margin-r-5"></i> Door No</strong>
               <p class="text-muted">
-                B.S. in Computer Science from the University of Tennessee at Knoxville
+                {{ patient_data.door }}
               </p>
               <hr>
               <strong><i class="fa fa-street-view margin-r-5"></i> Street Name</strong>
-              <p class="text-muted">Korlagunta</p>
+              <p class="text-muted">{{ patient_data.street }}</p>
               <hr>
               <strong><i class="fa fa-map-marker margin-r-5"></i> City</strong>
-              <p class="text-muted">Tirupati</p>
+              <p class="text-muted">{{ patient_data.city }}</p>
               <hr>
               <strong><i class="fa fa-map-marker margin-r-5"></i> State</strong>
-              <p>Andhra Pradesh</p>
+              <p>{{ patient_data.state }}</p>
               <hr>
               <strong><i class="fa fa-map-pin margin-r-5"></i> Pincode</strong>
-              <p>517501</p>
+              <p>{{ patient_data.pincode }}</p>
             </div>
             <!-- /.box-body -->
           </div>

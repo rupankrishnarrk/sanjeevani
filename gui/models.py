@@ -134,38 +134,57 @@ class PatientTimelineModel(models.Model):
             ("Fever or Cold", "Fever or Cold")
         ]
     )
-    notes = models.TextField()
+    notes = models.TextField(blank=True, null=True)
+    createdDate = models.DateTimeField(auto_now_add=True)
+    modifiedDate = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Patient Timeline"
+        verbose_name_plural = "Patient Timelines"
 
 
 class PatientScheduleModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    schedule = models.ForeignKey(PatientTimelineModel, on_delete=models.PROTECT, related_name='patient_schedule')
+    schedule_timeline = models.ForeignKey(PatientTimelineModel, on_delete=models.PROTECT, related_name='patient_schedule_timeline')
     staff = models.ForeignKey(StaffProfileModel, on_delete=models.PROTECT, related_name='patient_staff')
     datetime = models.DateTimeField()
     type = models.CharField(
         max_length=255,
-        choices=[
-            ("Abhyanganam Swedanam", "Abhyanganam Swedanam"),
-            ("Abhyanga Shirodhara", "Abhyanga Shirodhara"),
-            ("Kashaya Dhara", "Kashaya Dhara"),
-            ("Kashaya Vasti", "Kashaya Vasti"),
-            ("Kati Vasti", "Kati Vasti"),
-            ("Kizhi", "Kizhi"),
-            ("Ksheera Dhara", "Ksheera Dhara"),
-            ("Rejuvenate Therapy", "Rejuvenate Therapy"),
-            ("Marma Therapy", "Marma Therapy"),
-            ("Navara Kizhi", "Navara Kizhi"),
-            ("Patrapinda Swedanam", "Patrapinda Swedanam"),
-            ("Pizhizhil", "Pizhizhil"),
-            ("Podi Kizhi", "Podi Kizhi"),
-            ("Shirodhara", "Shirodhara"),
-            ("Takradhara", "Takradhara"),
-            ("Udavarthanam", "Udavarthanam"),
-            ("Upanaham", "Upanaham"),
-        ]
+        choices=(
+            ("General",
+             (("Other", "Other"), ("Rejuvenate Therapy", "Rejuvenate Therapy"))),
+            ("Panchakarma",
+             (("Abhyanganam Swedanam", "Abhyanganam Swedanam"),
+              ("Abhyanga Shirodhara", "Abhyanga Shirodhara"),
+              ("Kashaya Dhara", "Kashaya Dhara"),
+              ("Kashaya Vasti", "Kashaya Vasti"),
+              ("Kati Vasti", "Kati Vasti"),
+              ("Kizhi", "Kizhi"),
+              ("Ksheera Dhara", "Ksheera Dhara"),
+              ("Marma Therapy", "Marma Therapy"),
+              ("Navara Kizhi", "Navara Kizhi"),
+              ("Patrapinda Swedanam", "Patrapinda Swedanam"),
+              ("Pizhizhil", "Pizhizhil"),
+              ("Podi Kizhi", "Podi Kizhi"),
+              ("Shirodhara", "Shirodhara"),
+              ("Takradhara", "Takradhara"),
+              ("Udavarthanam", "Udavarthanam"),
+              ("Upanaham", "Upanaham"))),
+        )
     )
     status = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Patient Schedule"
         verbose_name_plural = "Patient Schedules"
+
+
+class PatientFilesModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    files_timeline = models.ForeignKey(PatientTimelineModel, on_delete=models.PROTECT,
+                                          related_name='patient_files_timeline')
+    file = models.FileField()
+
+    class Meta:
+        verbose_name = "Patient File"
+        verbose_name_plural = "Patient Files"

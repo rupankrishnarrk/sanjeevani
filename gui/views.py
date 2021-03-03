@@ -19,11 +19,7 @@ class Home(LoginRequiredMixin, TemplateView):
         return render(request, self.template_name, {})
 
 
-class Profile(LoginRequiredMixin, TemplateView):
-    template_name = "profile.html"
 
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, {})
 
 
 class PageNotFoundView(TemplateView):
@@ -51,6 +47,12 @@ class PatientProfileCreateView(LoginRequiredMixin, FormView):
         print(form.errors)
         return render(request, self.template_name, {'form': form})
 
+class Profile(LoginRequiredMixin, TemplateView):
+    template_name = "profile.html"
+
+    def get(self, request, *args, **kwargs):
+        data = get_object_or_404(models.PatientProfileModel, identifier=kwargs['identifier'])
+        return render(request, self.template_name, {'patient_data': data})
 
 class PatientProfileUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "patient-update.html"
