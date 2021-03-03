@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load referral_extras %}
 {% block content %}
   <div class="content-wrapper" style="min-height: 956px;">
     <!-- Content Header (Page header) -->
@@ -197,7 +198,7 @@
                   <div class="form-group col-md-4">
                     <i class="fa fa-bullhorn margin-r-5"></i> <label>Referral</label>
                     <select name="referral" class="form-control select2 referral" style="width: 100%;">
-                      {% if form.is_bound %} <option value="{{ form.referral.value }}">{{ form.referral.value }}</option>{% endif %}
+                      {% if form.is_bound %} <option value="{{ form.referral.value }}">{{ form.referral.value | referral_tag }}</option>{% endif %}
                     </select>
                     {% for error in form.referral.errors %}
                       <small class="text-danger">{{ error }}</small>
