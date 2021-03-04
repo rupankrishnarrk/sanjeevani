@@ -134,6 +134,9 @@ class PatientTimelineModel(models.Model):
             ("Fever or Cold", "Fever or Cold")
         ]
     )
+    doctor = models.ForeignKey(StaffProfileModel, on_delete=models.PROTECT, related_name='patient_doctor')
+    follow_up = models.DateField()
+    follow_up_status = models.BooleanField(default=False)
     notes = models.TextField(blank=True, null=True)
     createdDate = models.DateTimeField(auto_now_add=True)
     modifiedDate = models.DateTimeField(auto_now=True)
@@ -146,7 +149,7 @@ class PatientTimelineModel(models.Model):
 class PatientScheduleModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     schedule_timeline = models.ForeignKey(PatientTimelineModel, on_delete=models.PROTECT, related_name='patient_schedule_timeline')
-    staff = models.ForeignKey(StaffProfileModel, on_delete=models.PROTECT, related_name='patient_staff')
+    therapist = models.ForeignKey(StaffProfileModel, on_delete=models.PROTECT, related_name='patient_therapist')
     datetime = models.DateTimeField()
     type = models.CharField(
         max_length=255,

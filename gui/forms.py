@@ -27,3 +27,17 @@ class RegistrationForm(forms.ModelForm):
         record.createdBy = createdBy
         record.modifiedBy = modifiedBy
         record.save()
+
+
+class PatientTimelineForm(forms.ModelForm):
+
+    def save(self, pk=None):
+        record = super(PatientTimelineForm, self).save(commit=False)
+        print(record)
+        record.patient = pk
+        record.save()
+
+    class Meta:
+        model = models.PatientTimelineModel
+        # fields = '__all__'
+        exclude = ['follow_up_status', 'patient']

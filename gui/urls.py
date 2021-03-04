@@ -22,6 +22,7 @@ app_name = "gui"
 urlpatterns = [
     path('api/search/patient/', views.PatientSearchView.as_view(), name="patient-search"),
     path('home/', views.Home.as_view(), name="home"),
+    path('calendar/', views.CalendarView.as_view(), name="calendar"),
     path('patient/profile/<uuid:identifier>/', views.Profile.as_view(), name="profile"),
     path('pagenotfound/', views.PageNotFoundView.as_view(), name="pagenotfound"),
     path('patient/create/', views.PatientProfileCreateView.as_view(), name="patient-create"),

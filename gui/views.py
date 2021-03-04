@@ -19,7 +19,23 @@ class Home(LoginRequiredMixin, TemplateView):
         return render(request, self.template_name, {})
 
 
+class Profile(LoginRequiredMixin, TemplateView):
+    template_name = "profile.html"
 
+    def get(self, request, *args, **kwargs):
+        data = get_object_or_404(models.PatientProfileModel, identifier=kwargs['identifier'])
+        form = forms.PatientTimelineForm()
+        return render(request, self.template_name, {'patient_data': data, 'form': form, 'active': 'active'})
+
+    def post(self, request, *args, **kwargs):
+        data = get_object_or_404(models.PatientProfileModel, identifier=kwargs['identifier'])
+        form = forms.PatientTimelineForm(request.POST)
+        pk = data
+        if form.is_valid():
+            form.save(pk=pk)
+            return redirect('gui:home')
+        print(form.errors)
+        return render(request, self.template_name, {'form': form, 'patient_data': data, 'passive': 'active'})
 
 
 class PageNotFoundView(TemplateView):
@@ -47,12 +63,6 @@ class PatientProfileCreateView(LoginRequiredMixin, FormView):
         print(form.errors)
         return render(request, self.template_name, {'form': form})
 
-class Profile(LoginRequiredMixin, TemplateView):
-    template_name = "profile.html"
-
-    def get(self, request, *args, **kwargs):
-        data = get_object_or_404(models.PatientProfileModel, identifier=kwargs['identifier'])
-        return render(request, self.template_name, {'patient_data': data})
 
 class PatientProfileUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "patient-update.html"
@@ -81,3 +91,10 @@ class PatientSearchView(generics.GenericAPIView):
             q = request.GET.get('q', '')
             search = models.PatientProfileModel.objects.filter(mobile__contains=q).values('id', 'mobile')[:5]
             return response.Response(search, status=status.HTTP_200_OK)
+
+
+class CalendarView(TemplateView):
+    template_name = "calendar.html"
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {})

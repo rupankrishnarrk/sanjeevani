@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'gui', 'sslserver',
-    'nested_admin',
+    'nested_admin', 'crispy_forms'
 ]
 
 MIDDLEWARE = [
@@ -133,3 +133,5 @@ LOGIN_REDIRECT_URL = '/home'
 
 # Request to redirect after logout
 LOGOUT_REDIRECT_URL = '/login'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
