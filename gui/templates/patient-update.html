@@ -122,21 +122,11 @@
                         {% for i in form.allergies.value %}
                           <option value="{{ i }}" selected="selected">{{ i }}</option>
                         {% endfor %}
-                        {% for i in allergies_dropdown %}
-                          {% if i not in form.allergies.value %}
-                            <option value="{{ i }}" >{{ i }}</option>
-                          {% endif %}
-                       {% endfor %}
+                      {% else %}
+                        {% for i in data.allergies.all %}
+                          <option value="{{ i }}" selected="selected">{{ i }}</option>
+                        {% endfor %}
                       {% endif %}
-
-
-
-
-                      {% for i in allergies_dropdown %}
-                         {% if i not in data.allergies %}
-                           <option value="{{ i }}" >{{ i }}</option>
-                         {% endif %}
-                      {% endfor %}
                     </select>
                     {% for error in form.allergies.errors %}
                         <small class="text-danger">{{ error }}</small>
@@ -389,5 +379,16 @@
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
   }
+  .select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #e4e4e4;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    cursor: default;
+    float: left;
+    margin-right: 5px;
+    margin-top: 5px;
+    padding: 0 5px;
+    color: #0075ff;
+}
   </style>
 {% endblock content %}

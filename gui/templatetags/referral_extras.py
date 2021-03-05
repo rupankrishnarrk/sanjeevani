@@ -11,5 +11,4 @@ def referral_tag(value):
     try:
         return models.PatientProfileModel.objects.get(id=value).mobile
     except:
-        print('here')
         return ""

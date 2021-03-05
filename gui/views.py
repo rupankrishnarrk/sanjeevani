@@ -60,6 +60,9 @@ class PatientProfileCreateView(LoginRequiredMixin, FormView):
                                                     })
 
     def post(self, request, *args, **kwargs):
+        models.AllergiesModel.objects.bulk_create([
+            models.AllergiesModel(id=i) for i in request.POST.getlist('allergies')
+        ], ignore_conflicts=True)
         form = forms.RegistrationForm(request.POST)
         if form.is_valid():
             form.save(createdBy=request.user)
@@ -82,6 +85,9 @@ class PatientProfileUpdateView(LoginRequiredMixin, UpdateView):
 
     def post(self, request, *args, **kwargs):
         data = get_object_or_404(models.PatientProfileModel, identifier=kwargs['identifier'])
+        models.AllergiesModel.objects.bulk_create([
+            models.AllergiesModel(id=i) for i in request.POST.getlist('allergies')
+        ], ignore_conflicts=True)
         form = forms.RegistrationForm(request.POST, instance=data)
         createdBy = data.createdBy
         if form.is_valid():
