@@ -116,6 +116,33 @@
                   </div>
                 </div>
                 <div class="form-group col-md-4">
+                    <i class="fa fa-map-marker margin-r-5"></i> <label>Allergies *</label>
+                    <select id="allergies" name="allergies" class="form-control allergies select2" style="width: 100%;" multiple="multiple">
+                      {% if form.is_bound %}
+                        {% for i in form.allergies.value %}
+                          <option value="{{ i }}" selected="selected">{{ i }}</option>
+                        {% endfor %}
+                        {% for i in allergies_dropdown %}
+                          {% if i not in form.allergies.value %}
+                            <option value="{{ i }}" >{{ i }}</option>
+                          {% endif %}
+                       {% endfor %}
+                      {% endif %}
+
+
+
+
+                      {% for i in allergies_dropdown %}
+                         {% if i not in data.allergies %}
+                           <option value="{{ i }}" >{{ i }}</option>
+                         {% endif %}
+                      {% endfor %}
+                    </select>
+                    {% for error in form.allergies.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                      {% endfor %}
+                </div>
+                <div class="form-group col-md-4">
                   <i class="fa fa-building-o"></i> <label>Door No.</label>
                   <input type="text" class="form-control" name="door" placeholder="Door no, Apartment, studio, or floor" {% if form.is_bound %} value="{{ form.door.value}}" {% else %} value= "{{ data.door | default_if_none:'' }}" {% endif %}>
                   {% for error in form.door.errors %}
@@ -139,7 +166,7 @@
 <!--                <div class="form-row">-->
                   <div class="form-group col-md-4">
                     <i class="fa fa-map-marker margin-r-5"></i> <label>State *</label>
-                    <select name="state" class="form-control select2" style="width: 100%;">
+                    <select name="state" class="form-control state select2" style="width: 100%;">
                       {% if form.is_bound %} <option value="{{ form.state.value }}">{{ form.state.value }}</option>
                       {% else %} <option value="{{ data.state}}">{{ data.state }}</option> {% endif %}
                       <option value="Andhra Pradesh">Andhra Pradesh</option>
@@ -271,6 +298,10 @@
       age.value = diff;
     });
     $(document).ready(function() {
+      $(".allergies").select2({
+        tags: true
+      });
+      $('.state').select2();
       $('.referral').select2({
         minimumInputLength: 5,
         maximumInputLength: 10,

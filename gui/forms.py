@@ -27,6 +27,7 @@ class RegistrationForm(forms.ModelForm):
         record.createdBy = createdBy
         record.modifiedBy = modifiedBy
         record.save()
+        self.save_m2m()
 
 
 class PatientTimelineForm(forms.ModelForm):

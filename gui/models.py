@@ -3,9 +3,15 @@ from django.core.validators import RegexValidator, \
     MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 from uuid import uuid4
+from django.contrib.postgres.fields import ArrayField
+from multiselectfield import MultiSelectField
 
 
 # Create your models here.
+
+class AllergiesModel(models.Model):
+    id = models.CharField(max_length=255, primary_key=True)
+
 
 class StaffProfileModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
@@ -82,6 +88,13 @@ class PatientProfileModel(models.Model):
             MaxValueValidator(10)
         ]
     )
+    # CHOICES = (
+    #     ('Drug Allergy', 'Drug Allergy'),
+    #     ('Food Allergy', 'Food Allergy'),
+    #     ('Insect Allergy', 'Insect Allergy')
+    # )
+    # allergies = MultiSelectField(choices=CHOICES)
+    allergies = models.ManyToManyField(AllergiesModel)
     door = models.CharField(max_length=50, blank=True, null=True)
     street = models.CharField(max_length=50, blank=True, null=True)
     district = models.CharField(max_length=50, blank=True, null=True)

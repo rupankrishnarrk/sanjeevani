@@ -51,6 +51,11 @@ class PatientTimelineAdmin(nested_admin.NestedTabularInline):
     extra = 0
 
 
+@admin.register(models.AllergiesModel)
+class AllergiesAdmin(admin.ModelAdmin):
+    pass
+
+
 @admin.register(models.PatientProfileModel)
 class PatientProfileAdmin(nested_admin.NestedModelAdmin):
     inlines = [PatientTimelineAdmin]

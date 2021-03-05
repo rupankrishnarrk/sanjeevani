@@ -116,6 +116,19 @@
                   </div>
                 </div>
                 <div class="form-group col-md-4">
+                    <i class="fa fa-map-marker margin-r-5"></i> <label>Allergies *</label>
+                    <select id="allergies" name="allergies" class="form-control allergies select2" style="width: 100%;" multiple="multiple">
+                       {% if form.is_bound %}
+                        {% for i in form.allergies.value %}
+                          <option value="{{ i }}" selected="selected">{{ i }}</option>
+                        {% endfor %}
+                      {% endif %}
+                    </select>
+                    {% for error in form.allergies.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                      {% endfor %}
+                </div>
+                <div class="form-group col-md-4">
                   <i class="fa fa-building-o"></i> <label>Door No.</label>
                   <input type="text" class="form-control" name="door" placeholder="Door no, Apartment, studio, or floor" {% if form.is_bound %} value="{{ form.door.value }}" {% endif %}>
                   {% for error in form.door.errors %}
@@ -139,7 +152,7 @@
 <!--                <div class="form-row">-->
                   <div class="form-group col-md-4">
                     <i class="fa fa-map-marker margin-r-5"></i> <label>State *</label>
-                    <select name="state" class="form-control select2" style="width: 100%;">
+                    <select name="state" class="form-control state select2" style="width: 100%;">
                       {% if form.is_bound %} <option value="{{ form.state.value }}">{{ form.state.value }}</option> "{% endif %}
                       <option value=""></option>
                       <option value="Andhra Pradesh">Andhra Pradesh</option>
@@ -271,7 +284,10 @@
     });
 
     $(document).ready(function() {
-      $('.select2').select2();
+      $(".allergies").select2({
+        tags: true
+      });
+      $('.state').select2();
       $('.referral').select2({
         minimumInputLength: 5,
         maximumInputLength: 10,
