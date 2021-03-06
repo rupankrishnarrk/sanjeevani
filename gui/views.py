@@ -9,6 +9,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework import response
 from rest_framework import status
+from datetime import datetime
+from datetime import timedelta
 
 allergies_dropdown = ['Drug Allergy', 'Food Allergy', 'Insect Allergy']
 
@@ -116,8 +118,8 @@ class AppointmentView(CreateView):
     def post(self, request, *args, **kwargs):
         form = forms.AppointmentForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('gui:home')
+            form.save(createdBy=request.user)
+            return redirect('gui:calendar')
         print(form.errors)
         return render(request, self.template_name, {'form': form})
 
@@ -133,9 +135,10 @@ class AppointmentUpdateView(UpdateView):
     def post(self, request, *args, **kwargs):
         data = get_object_or_404(models.AppointmentModel, pk=kwargs['identifier'])
         form = forms.AppointmentForm(request.POST, instance=data)
+        createdBy = data.createdBy
         if form.is_valid():
-            form.save()
-            return redirect('gui:home')
+            form.save(createdBy=createdBy, modifiedBy=request.user)
+            return redirect('gui:calendar')
         print(form.errors)
         return render(request, self.template_name, {'form': form})
 
@@ -144,5 +147,7 @@ class CalendarView(TemplateView):
     template_name = "calendar.html"
 
     def get(self, request, *args, **kwargs):
-        data = models.AppointmentModel.objects.all()
+        startDate = datetime.now() - timedelta(days=60)
+        endTime = datetime.now() + timedelta(days=60)
+        data = models.AppointmentModel.objects.filter(starttime__gte=startDate, starttime__lte=endTime)
         return render(request, self.template_name, {'data': data})

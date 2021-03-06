@@ -24,9 +24,12 @@
           <div class="box box-primary">
             <div class="box-body no-padding">
               <!-- THE CALENDAR -->
+               <div class="center">
+                 <a class="btn btn-success" href="{% url 'gui:appointment' %}">Book Appointment</a>
+               </div>
               <div id="calendar"></div>
             </div>
-            <!-- /.box-body -->
+            <!-- /.box-bod>y -->
           </div>
           <!-- /. box -->
         </div>
@@ -89,6 +92,7 @@
       events    : [
         {% for i in data %}
           {
+          'id' : '{{ i.id }}',
           'title': '{{ i.name }}',
           'start'          : '{{ i.starttime | date:"Y-m-d H:i" }}',
           'backgroundColor': '#f56954', //red
@@ -98,6 +102,14 @@
       ],
       editable  : true,
       droppable : true, // this allows things to be dropped onto the calendar !!!
+      //Calendar
+
+      eventClick: function(info) {
+        console.log(info)
+        window.location.replace("/appointment/" + info.id)
+        //alert('ID: ' + info.id);
+      },
+
       drop      : function (date, allDay) { // this function is called when something is dropped
 
         // retrieve the dropped element's stored Event Object
@@ -164,9 +176,17 @@
 </script>
 <script>
   $(document).on('click', '#calendar', function() {
-      console.log('vamsi)
+      console.log('vamsi')
     });
 </script>
+<style>
+  .center {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
 
   <!-- /.content-wrapper -->
 {% endblock content %}

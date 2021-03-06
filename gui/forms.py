@@ -49,6 +49,12 @@ class PatientTimelineForm(forms.ModelForm):
 
 class AppointmentForm(forms.ModelForm):
 
+    def save(self, createdBy=None, modifiedBy=None):
+        record = super(AppointmentForm, self).save(commit=False)
+        record.createdBy = createdBy
+        record.modifiedBy = modifiedBy
+        record.save()
+
     class Meta:
         model = models.AppointmentModel
-        fields = '__all__'
+        exclude = ['createdBy', 'modifiedBy']

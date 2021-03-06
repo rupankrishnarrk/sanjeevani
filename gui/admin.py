@@ -78,3 +78,11 @@ class AllergiesAdmin(admin.ModelAdmin):
 @admin.register(models.AppointmentModel)
 class AppointmentAdmin(admin.ModelAdmin):
     list_display = ['name', 'mobile', 'starttime', 'status']
+
+    def save_model(self, request, rows, form, change):
+        if rows._state.adding:
+            rows.createdBy_id = request.user.id
+        else:
+            rows.modifiedDate = datetime.now()
+            rows.modifiedBy_id = request.user.id
+        super().save_model(request, rows, form, change)
