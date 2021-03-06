@@ -45,15 +45,14 @@ class PatientFileAdmin(nested_admin.NestedTabularInline):
     ordering = ('file',)
     extra = 0
 
+@admin.register(models.PatientTimelineModel)
+class PatientTimelineAdmin2(nested_admin.NestedModelAdmin):
+    inlines = [PatientScheduleAdmin, PatientFileAdmin]
+    list_display = ['id', 'patient', 'visit']
 
 class PatientTimelineAdmin(nested_admin.NestedTabularInline):
     model = models.PatientTimelineModel
     extra = 0
-
-
-@admin.register(models.AllergiesModel)
-class AllergiesAdmin(admin.ModelAdmin):
-    pass
 
 
 @admin.register(models.PatientProfileModel)
@@ -70,6 +69,12 @@ class PatientProfileAdmin(nested_admin.NestedModelAdmin):
     #
     # def has_delete_permission(self, request, obj=None):
     #     return False
+
+@admin.register(models.AllergiesModel)
+class AllergiesAdmin(admin.ModelAdmin):
+    pass
+
+
 @admin.register(models.AppointmentModel)
 class AppointmentAdmin(admin.ModelAdmin):
     list_display = ['name', 'mobile', 'starttime', 'status']

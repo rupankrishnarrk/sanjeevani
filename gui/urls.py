@@ -24,6 +24,7 @@ urlpatterns = [
     path('home/', views.Home.as_view(), name="home"),
     path('appointment/', views.AppointmentView.as_view(), name="appointment"),
     path('appointment/<uuid:identifier>/', views.AppointmentUpdateView.as_view(), name="appointment-update"),
+    path('calendar/', views.CalendarView.as_view(), name="calendar"),
     path('patient/profile/<uuid:identifier>/', views.Profile.as_view(), name="profile"),
     path('pagenotfound/', views.PageNotFoundView.as_view(), name="pagenotfound"),
     path('patient/create/', views.PatientProfileCreateView.as_view(), name="patient-create"),

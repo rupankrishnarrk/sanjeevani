@@ -138,3 +138,11 @@ class AppointmentUpdateView(UpdateView):
             return redirect('gui:home')
         print(form.errors)
         return render(request, self.template_name, {'form': form})
+
+
+class CalendarView(TemplateView):
+    template_name = "calendar.html"
+
+    def get(self, request, *args, **kwargs):
+        data = models.AppointmentModel.objects.all()
+        return render(request, self.template_name, {'data': data})
