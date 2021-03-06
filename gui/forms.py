@@ -20,8 +20,6 @@ class RegistrationForm(forms.ModelForm):
         if bool(self.cleaned_data['referral']):
             if self.instance.id == self.cleaned_data['referral'].id:
                 raise forms.ValidationError('Patient cannot be referral himself ')
-        print('######################')
-        print(self.cleaned_data['referral'])
         return self.cleaned_data['referral']
 
 
@@ -35,16 +33,15 @@ class RegistrationForm(forms.ModelForm):
 
 class PatientTimelineForm(forms.ModelForm):
 
-    def save(self, pk=None):
+    def save(self, pk=None, createdBy=None):
         record = super(PatientTimelineForm, self).save(commit=False)
-        print(record)
+        record.createdBy = createdBy
         record.patient = pk
         record.save()
 
     class Meta:
         model = models.PatientTimelineModel
-        # fields = '__all__'
-        exclude = ['follow_up_status', 'patient']
+        exclude = ['follow_up_status', 'patient', 'createdBy', 'modifiedBy']
 
 
 class AppointmentForm(forms.ModelForm):

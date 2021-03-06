@@ -150,6 +150,8 @@ class PatientTimelineModel(models.Model):
     notes = models.TextField(blank=True, null=True)
     createdDate = models.DateTimeField(auto_now_add=True)
     modifiedDate = models.DateTimeField(auto_now=True)
+    createdBy = models.ForeignKey(User, on_delete=models.CASCADE, related_name="patienttimeline_created", null=True, blank=True)
+    modifiedBy = models.ForeignKey(User, on_delete=models.CASCADE, related_name="patienttimeline_modified", null=True, blank=True)
 
     class Meta:
         verbose_name = "Patient Timeline"

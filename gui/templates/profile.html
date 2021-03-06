@@ -39,6 +39,7 @@
                   <i class="fa fa-user"></i> <b>Age</b> <a class="pull-right">{{ patient_data.dob }}</a>
                 </li>
               </ul>
+              <a class="btn btn-primary btn-block" href="{% url 'gui:patient-update' identifier=patient_data.identifier %}"><b>Edit Profile</b></a>
             </div>
             <!-- /.box-body -->
           </div>
@@ -123,7 +124,7 @@
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
               <li class="{{ active }}"><a href="#timeline" data-toggle="tab" aria-expanded="true">Timeline</a></li>
-              <li class="{{ passive }}"><a href="#settings" data-toggle="tab" aria-expanded="false">Settings</a></li>
+              <li class="{{ passive }}"><a href="#settings" data-toggle="tab" aria-expanded="false">Add Timeline</a></li>
             </ul>
             <div class="tab-content">
               <!-- /.tab-pane -->
@@ -295,7 +296,7 @@
 <script>
   $(document).ready(function() {
     $('#id_follow_up').datepicker({
-        endDate: moment().subtract(180, 'days').format('YYYY-MM-DD'),
+        startDate: new Date(),
         format: 'yyyy-mm-dd',
         autoclose: true
       });

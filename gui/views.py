@@ -35,7 +35,7 @@ class Profile(LoginRequiredMixin, TemplateView):
         form = forms.PatientTimelineForm(request.POST)
         pk = data
         if form.is_valid():
-            form.save(pk=pk)
+            form.save(pk=pk, createdBy=request.user)
             return redirect('gui:home')
         print(form.errors)
         return render(request, self.template_name, {'form': form, 'patient_data': data, 'passive': 'active'})
