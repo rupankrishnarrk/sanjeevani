@@ -70,3 +70,6 @@ class PatientProfileAdmin(nested_admin.NestedModelAdmin):
     #
     # def has_delete_permission(self, request, obj=None):
     #     return False
+@admin.register(models.AppointmentModel)
+class AppointmentAdmin(admin.ModelAdmin):
+    list_display = ['name', 'mobile', 'starttime', 'status']

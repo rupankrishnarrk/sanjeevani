@@ -106,8 +106,35 @@ class PatientSearchView(generics.GenericAPIView):
             return response.Response(search, status=status.HTTP_200_OK)
 
 
-class CalendarView(TemplateView):
-    template_name = "calendar.html"
+class AppointmentView(CreateView):
+    template_name = "appointment.html"
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, {})
+        form = forms.AppointmentForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = forms.AppointmentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('gui:home')
+        print(form.errors)
+        return render(request, self.template_name, {'form': form})
+
+
+class AppointmentUpdateView(UpdateView):
+    template_name = "appointment.html"
+
+    def get(self, request, *args, **kwargs):
+        data = get_object_or_404(models.AppointmentModel, pk=kwargs['identifier'])
+        form = forms.AppointmentForm(instance=data)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        data = get_object_or_404(models.AppointmentModel, pk=kwargs['identifier'])
+        form = forms.AppointmentForm(request.POST, instance=data)
+        if form.is_valid():
+            form.save()
+            return redirect('gui:home')
+        print(form.errors)
+        return render(request, self.template_name, {'form': form})

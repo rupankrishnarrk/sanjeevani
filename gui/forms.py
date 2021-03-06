@@ -20,6 +20,8 @@ class RegistrationForm(forms.ModelForm):
         if bool(self.cleaned_data['referral']):
             if self.instance.id == self.cleaned_data['referral'].id:
                 raise forms.ValidationError('Patient cannot be referral himself ')
+        print('######################')
+        print(self.cleaned_data['referral'])
         return self.cleaned_data['referral']
 
 
@@ -43,3 +45,10 @@ class PatientTimelineForm(forms.ModelForm):
         model = models.PatientTimelineModel
         # fields = '__all__'
         exclude = ['follow_up_status', 'patient']
+
+
+class AppointmentForm(forms.ModelForm):
+
+    class Meta:
+        model = models.AppointmentModel
+        fields = '__all__'

@@ -91,13 +91,7 @@ class PatientProfileModel(models.Model):
             MaxValueValidator(10)
         ]
     )
-    # CHOICES = (
-    #     ('Drug Allergy', 'Drug Allergy'),
-    #     ('Food Allergy', 'Food Allergy'),
-    #     ('Insect Allergy', 'Insect Allergy')
-    # )
-    # allergies = MultiSelectField(choices=CHOICES)
-    allergies = models.ManyToManyField(AllergiesModel)
+    allergies = models.ManyToManyField(AllergiesModel, blank=True)
     door = models.CharField(max_length=50, blank=True, null=True)
     street = models.CharField(max_length=50, blank=True, null=True)
     district = models.CharField(max_length=50, blank=True, null=True)
@@ -207,3 +201,29 @@ class PatientFilesModel(models.Model):
     class Meta:
         verbose_name = "Patient File"
         verbose_name_plural = "Patient Files"
+
+class AppointmentModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    name = models.CharField(max_length=255)
+    phone_regex = RegexValidator(
+        regex=r'^\d{10}$',
+        message="Phone number must contain 10 digits: 9491432233"
+    )
+    mobile = models.CharField(
+        max_length=10,
+        validators=[
+            phone_regex
+        ]
+    )
+    starttime = models.DateTimeField()
+    status = models.CharField(
+        blank=True, null=True,
+        max_length=255,
+        choices=[
+            ('Completed', 'Completed'),
+            ('Not Interested', 'Not Interested'),
+            ('Missed', 'Missed'),
+        ]
+    )
+    notes = models.TextField(blank=True)
+

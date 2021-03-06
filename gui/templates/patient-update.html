@@ -116,7 +116,7 @@
                   </div>
                 </div>
                 <div class="form-group col-md-4">
-                    <i class="fa fa-map-marker margin-r-5"></i> <label>Allergies *</label>
+                    <i class="fa fa-plus-square margin-r-5"></i> <label>Allergies</label>
                     <select id="allergies" name="allergies" class="form-control allergies select2" style="width: 100%;" multiple="multiple">
                       {% if form.is_bound %}
                         {% for i in form.allergies.value %}
@@ -215,7 +215,7 @@
                   <div class="form-group col-md-4">
                     <i class="fa fa-bullhorn margin-r-5"></i> <label>Referral</label>
                     <select name="referral" class="form-control select2 referral" style="width: 100%;">
-                      {% if form.is_bound %} <option value="{{ form.referral.value }}">{{ form.referral.value | referral_tag }}</option>
+                      {% if form.is_bound %} <option value="{{ form.referral.value | default_if_none:'' }}">{{ form.referral.value | referral_tag }}</option>
                       {% else %} <option value="{{ data.referral.id }}">{{ data.referral.mobile }}</option> {% endif %}
                     </select>
                     {% for error in form.referral.errors %}

@@ -21,7 +21,7 @@
           <!-- Profile Image -->
           <div class="box box-primary">
             <div class="box-body box-profile">
-              <img class="profile-user-img img-responsive img-circle" width="160px" height="160px" src="{{ patient_data.picture }}">
+              <img class="profile-user-img img-responsive img-circle" src="{{ patient_data.picture }}">
               <h3 class="profile-username text-center">{{ patient_data.get_full_name }}</h3>
               <p class="text-muted text-center">{{ patient_data.id }}</p>
               <ul class="list-group list-group-unbordered">
@@ -123,17 +123,47 @@
                   <!-- timeline item -->
                   <li>
                     <i class="fa fa-envelope bg-blue"></i>
-
                     <div class="timeline-item">
                       <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-
                       <h3 class="timeline-header"><a href="#">Consultation </a> </h3>
-
                       <div class="timeline-body">
-                        <i class="fa fa-user-md"></i> Doctor: Kishore<br>
-                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Reason: General<br>
-                        <i class="fa fa-calendar" aria-hidden="true"></i> follow up: 2021-03-19, in 7 days<br>
-                        <i class="fa fa-info-circle" aria-hidden="true"></i> follow up status: <i class="fa fa-check" aria-hidden="true"></i>
+                        <div class="container">
+                          <div class="row">
+                            <div class="col-md-4">
+                              <div class="table-responsive">
+                                <table class="table no-margin">
+                                  <tbody>
+                                  <tr>
+                                    <td><i class="fa fa-user-md" style="color: #00a65a"> </i> <strong style="color: #00a65a"> Doctor </strong></td>
+                                    <td>|</td>
+                                    <td>Kishore</td>
+                                  </tr>
+                                  <tr>
+                                    <td><i class="fa fa-edit" style="color: #00a65a"> </i> <strong style="color: #00a65a"> Reason </strong></td>
+                                    <td>|</td>
+                                    <td>General</td>
+                                  </tr>
+                                  <tr>
+                                    <td><i class="fa fa-calendar" style="color: #00a65a"> </i> <strong style="color: #00a65a"> Follow up </strong></td>
+                                    <td>|</td>
+                                    <td>2021-03-19, in 7 days</td>
+                                  </tr>
+                                  <tr>
+                                    <td><i class="fa fa-info-circle" style="color: #00a65a"> </i> <strong style="color: #00a65a"> Follow up status </strong></td>
+                                    <td>|</td>
+                                    <td><i class="fa fa-check" aria-hidden="true"></i></td>
+                                  </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <p style="font-size: 15px">
+                                <i class="fa fa-user-md" style="color: #00a65a"> </i> Doctor: Kishore<br>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                       <div class="timeline-footer">
                         <a class="btn btn-primary btn-xs">Edit</a>
@@ -155,7 +185,6 @@
                 </ul>
               </div>
               <!-- /.tab-pane -->
-
               <div class="tab-pane {{ passive }}" id="settings">
                 <style>
                   .invalid-feedback{
