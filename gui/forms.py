@@ -22,13 +22,13 @@ class RegistrationForm(forms.ModelForm):
                 raise forms.ValidationError('Patient cannot be referral himself ')
         return self.cleaned_data['referral']
 
-
     def save(self, createdBy=None, modifiedBy=None):
         record = super(RegistrationForm, self).save(commit=False)
         record.createdBy = createdBy
         record.modifiedBy = modifiedBy
         record.save()
         self.save_m2m()
+
 
 
 class PatientTimelineForm(forms.ModelForm):

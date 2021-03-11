@@ -3,12 +3,9 @@ from django.core.validators import RegexValidator, \
     MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 from uuid import uuid4
-from django.contrib.postgres.fields import ArrayField
-from multiselectfield import MultiSelectField
 
 
 # Create your models here.
-
 class AllergiesModel(models.Model):
     id = models.CharField(max_length=255, primary_key=True)
 
@@ -16,16 +13,42 @@ class AllergiesModel(models.Model):
         return self.id
 
 
-class StaffProfileModel(models.Model):
+class BranchModel(models.Model):
+    name = models.CharField(
+        primary_key=True,
+        max_length=255,
+        choices=[
+            ("Karkambadi Road", "Karkambadi Road")
+        ]
+    )
+    address = models.TextField()
+    createdBy = models.ForeignKey(User, on_delete=models.CASCADE, related_name="location_created")
+    modifiedBy = models.ForeignKey(User, on_delete=models.CASCADE, related_name="location_modified", null=True, blank=True)
+    createdDate = models.DateTimeField(auto_now_add=True)
+    modifiedDate = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Branch"
+        verbose_name_plural = "Branches"
+
+
+class UserProfileModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    user = models.OneToOneField(User, on_delete=models.PROTECT, related_name='userprofile')
     designation = models.CharField(
         max_length=255,
         choices=[
+            ("Staff", "Staff"),
+            ("Admin", "Admin"),
             ("Doctor", "Doctor"),
+            ("Manager", "Manager"),
             ("Therapist", "Therapist"),
+            ("Receptionist", "Receptionist"),
         ]
     )
-    name = models.CharField(max_length=255)
     mobile_regex = RegexValidator(
         regex=r'^\d{10}$',
         message="Phone number must contain 10 digits: 9491432233"
@@ -36,17 +59,18 @@ class StaffProfileModel(models.Model):
             mobile_regex
         ]
     )
+    branch = models.ForeignKey(BranchModel, on_delete=models.PROTECT)
     createdBy = models.ForeignKey(User, on_delete=models.CASCADE, related_name="staff_created")
     modifiedBy = models.ForeignKey(User, on_delete=models.CASCADE, related_name="staff_modified", null=True, blank=True)
     createdDate = models.DateTimeField(auto_now_add=True)
     modifiedDate = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return self.user.get_full_name()
 
     class Meta:
-        verbose_name = "Staff Record"
-        verbose_name_plural = "Staff Records"
+        verbose_name = "User Profile"
+        verbose_name_plural = "User Profiles"
 
 
 class PatientProfileModel(models.Model):
@@ -107,6 +131,7 @@ class PatientProfileModel(models.Model):
             pincode_regex
         ], blank=True, null=True
     )
+    branch = models.ForeignKey(BranchModel, on_delete=models.PROTECT)
     notes = models.TextField(null=True, blank=True)
     referral = models.ForeignKey('self', null=True, blank=True, related_name='patient_referral', on_delete=models.PROTECT)
     createdBy = models.ForeignKey(User, on_delete=models.CASCADE, related_name="patient_created", null=True, blank=True)
@@ -127,7 +152,7 @@ class PatientProfileModel(models.Model):
 
 class PatientTimelineModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    patient = models.ForeignKey(PatientProfileModel, on_delete=models.PROTECT, related_name='patient')
+    patient = models.ForeignKey(PatientProfileModel, on_delete=models.PROTECT, related_name='patient_timeline')
     visit = models.CharField(
         max_length=100,
         choices=[
@@ -144,25 +169,23 @@ class PatientTimelineModel(models.Model):
             ("Fever or Cold", "Fever or Cold")
         ]
     )
-    doctor = models.ForeignKey(StaffProfileModel, on_delete=models.PROTECT, related_name='patient_doctor')
     follow_up = models.DateField()
     follow_up_status = models.BooleanField(default=False)
     notes = models.TextField(blank=True, null=True)
+    branch = models.ForeignKey(BranchModel, on_delete=models.PROTECT)
     createdDate = models.DateTimeField(auto_now_add=True)
     modifiedDate = models.DateTimeField(auto_now=True)
     createdBy = models.ForeignKey(User, on_delete=models.CASCADE, related_name="patienttimeline_created", null=True, blank=True)
     modifiedBy = models.ForeignKey(User, on_delete=models.CASCADE, related_name="patienttimeline_modified", null=True, blank=True)
 
     class Meta:
+        ordering = ['-createdDate']
         verbose_name = "Patient Timeline"
         verbose_name_plural = "Patient Timelines"
 
 
-class PatientScheduleModel(models.Model):
+class TreatmentTypesModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    schedule_timeline = models.ForeignKey(PatientTimelineModel, on_delete=models.PROTECT, related_name='patient_schedule_timeline')
-    therapist = models.ForeignKey(StaffProfileModel, on_delete=models.PROTECT, related_name='patient_therapist')
-    datetime = models.DateTimeField()
     type = models.CharField(
         max_length=255,
         choices=(
@@ -187,6 +210,26 @@ class PatientScheduleModel(models.Model):
               ("Upanaham", "Upanaham"))),
         )
     )
+    price = models.IntegerField()
+    createdDate = models.DateTimeField(auto_now_add=True)
+    modifiedDate = models.DateTimeField(auto_now=True)
+    createdBy = models.ForeignKey(User, on_delete=models.CASCADE, related_name="treatmenttypes_created", null=True, blank=True)
+    modifiedBy = models.ForeignKey(User, on_delete=models.CASCADE, related_name="treatmenttypes_modified", null=True, blank=True)
+
+    def __str__(self):
+        return self.type
+
+    class Meta:
+        verbose_name = "Treatment Type"
+        verbose_name_plural = "Treatment Types"
+
+
+class PatientScheduleModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    schedule_timeline = models.ForeignKey(PatientTimelineModel, on_delete=models.PROTECT, related_name='patient_schedule_timeline')
+    treatment = models.ForeignKey(TreatmentTypesModel, on_delete=models.PROTECT)
+    staff = models.ManyToManyField(UserProfileModel, related_name='patient_staff')
+    datetime = models.DateTimeField()
     status = models.BooleanField(default=False)
 
     class Meta:
@@ -198,15 +241,33 @@ class PatientFilesModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     files_timeline = models.ForeignKey(PatientTimelineModel, on_delete=models.PROTECT,
                                           related_name='patient_files_timeline')
+    file_type = models.CharField(
+        max_length=255,
+        choices=[
+            ("Medical Report", "Medical Report"),
+            ("Radiology Report", "Radiology Report"),
+            ("Laboratory Report", "Laboratory Report"),
+            ("Medical Prescription", "Medical Prescription")
+        ]
+    )
     file = models.FileField()
 
     class Meta:
         verbose_name = "Patient File"
         verbose_name_plural = "Patient Files"
 
+
 class AppointmentModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     name = models.CharField(max_length=255)
+    visit = models.CharField(
+        max_length=255,
+        choices=[
+            ("Therapy", "Therapy"),
+            ("Medicine", "Medicine"),
+            ("Consultation", "Consultation"),
+        ]
+    )
     phone_regex = RegexValidator(
         regex=r'^\d{10}$',
         message="Phone number must contain 10 digits: 9491432233"

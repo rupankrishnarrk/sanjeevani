@@ -4,10 +4,24 @@ from datetime import datetime
 import nested_admin
 
 
-@admin.register(models.StaffProfileModel)
-class StaffProfileAdmin(admin.ModelAdmin):
-    list_display = ['designation', 'name', 'mobile', 'createdDate', 'modifiedDate']
+@admin.register(models.BranchModel)
+class BranchAdmin(admin.ModelAdmin):
+    list_display = ['name', 'address']
+    readonly_fields = ['createdDate', 'modifiedDate', 'createdBy', 'modifiedBy']
+    def save_model(self, request, rows, form, change):
+        if rows._state.adding:
+            rows.createdBy_id = request.user.id
+        else:
+            rows.modifiedDate = datetime.now()
+            rows.modifiedBy_id = request.user.id
+        super().save_model(request, rows, form, change)
+
+
+@admin.register(models.UserProfileModel)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ['designation', 'user', 'mobile', 'createdDate', 'modifiedDate']
     readonly_fields = ['createdBy', 'modifiedBy']
+    search_fields = ['user']
 
     def save_model(self, request, rows, form, change):
         if rows._state.adding:
@@ -20,6 +34,7 @@ class StaffProfileAdmin(admin.ModelAdmin):
 
 class PatientScheduleAdmin(nested_admin.NestedTabularInline):
     model = models.PatientScheduleModel
+    autocomplete_fields = ('staff',)
     ordering = ('datetime',)
     extra = 0
 
@@ -72,6 +87,20 @@ class AllergiesAdmin(admin.ModelAdmin):
 @admin.register(models.AppointmentModel)
 class AppointmentAdmin(admin.ModelAdmin):
     list_display = ['name', 'mobile', 'starttime', 'status']
+    readonly_fields = ['createdBy', 'modifiedBy']
+
+    def save_model(self, request, rows, form, change):
+        if rows._state.adding:
+            rows.createdBy_id = request.user.id
+        else:
+            rows.modifiedDate = datetime.now()
+            rows.modifiedBy_id = request.user.id
+        super().save_model(request, rows, form, change)
+
+
+@admin.register(models.TreatmentTypesModel)
+class TreatmentTypesAdmin(admin.ModelAdmin):
+    readonly_fields = ['createdBy', 'modifiedBy']
 
     def save_model(self, request, rows, form, change):
         if rows._state.adding:

@@ -107,8 +107,7 @@
                   <div class="form-group col-md-4">
                     <label for="height">Height (ft.)</label>
                     <div class="input-group" style="width: 100%">
-                      <input id="height" name="height" type="range" min="0" max="8" step="0.1" {% if form.is_bound %} value="{{ form.height.value }}" {% endif %} {% if form.is_bound is None %} value="0.0" {% endif %}/>
-                      <small id="height_value"><b></b>Inchs</small>′
+                      <input id="height" name="height" placeholder="feet" type="number" min="0" max="8" step=".01" {% if form.is_bound %} value="{{ form.height.value }}" {% endif %} {% if form.is_bound is None %} {% endif %}/>
                       {% for error in form.height.errors %}
                         <small class="text-danger">{{ error }}</small>
                       {% endfor %}
@@ -221,6 +220,16 @@
                   </div>
                 </div>
                 <div class="form-group col-md-4">
+                  <i class="fa fa-map-marker margin-r-5"></i> <label>Branch *</label>
+                  <select name="branch" class="form-control state select2" style="width: 100%;">
+                    {% if form.is_bound %} <option value="{{ form.branch.value }}">{{ form.branch.value }}</option> "{% endif %}
+                    <option value="Karkambadi Road">Karkambadi Road</option>
+                  </select>
+                  {% for error in form.branch.errors %}
+                    <small class="text-danger">{{error}}</small>
+                  {% endfor %}
+                </div>
+                <div class="form-group col-md-4">
                   <i class="fa fa-sticky-note margin-r-5"></i> <label>Notes</label>
                   <textarea class="form-control" name="notes" placeholder="Write important notes here...." {% if form.is_bound %} value="{{ form.notes.value }} {% endif %}"></textarea>
                   {% for error in form.notes.errors %}
@@ -263,12 +272,6 @@
     weight_output.innerHTML = weight.value;
     weight.oninput = function() {
       weight_output.innerText = this.value;
-    }
-    var height = document.getElementById("height");
-    var height_output = document.getElementById("height_value");
-    height_output.innerHTML = height.value;
-    height.oninput = function() {
-      height_output.innerHTML = this.value;
     }
   </script>
   <script>

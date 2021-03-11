@@ -38,6 +38,9 @@
                 <li class="list-group-item">
                   <i class="fa fa-user"></i> <b>Age</b> <a class="pull-right">{{ patient_data.dob }}</a>
                 </li>
+                 <li class="list-group-item">
+                  <i class="fa fa-hospital-o"></i> <b>Branch</b> <a class="pull-right">{{ patient_data.branch.name }}</a>
+                </li>
               </ul>
               <a class="btn btn-primary btn-block" href="{% url 'gui:patient-update' identifier=patient_data.identifier %}"><b>Edit Profile</b></a>
             </div>
@@ -131,10 +134,11 @@
               <div class="tab-pane {{ active }}" id="timeline">
                 <!-- The timeline -->
                 <ul class="timeline timeline-inverse">
+                  {% for i in patient_data.patient_timeline.all %}
                   <!-- timeline time label -->
                   <li class="time-label">
                         <span class="bg-red">
-                          10 Feb. 2014
+                          {{ i.createdDate | date:'d F Y'}}
                         </span>
                   </li>
                   <!-- /.timeline-label -->
@@ -142,81 +146,41 @@
                   <li>
                     <i class="fa fa-envelope bg-blue"></i>
                     <div class="timeline-item">
-                      <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-                      <h3 class="timeline-header"><a href="#">Consultation </a> </h3>
+                      <span class="time"><i class="fa fa-clock-o"></i> {{ i.createdDate | date:'g:i A' }}</span>
+                      <h3 class="timeline-header"><a href="#">{{ i.visit }} </a> </h3>
                       <div class="timeline-body">
                         <div class="container">
                           <div class="row">
-                            <div class="col-md-3">
-                              <div class="table-responsive">
-                                <table class="table no-margin">
-                                  <tbody>
-                                  <tr>
-                                    <td><i class="fa fa-user-md" style="color: #00a65a"> </i> <strong style="color: #00a65a"> Doctor </strong></td>
-                                    <td>|</td>
-                                    <td>Kishore</td>
-                                  </tr>
-                                  <tr>
-                                    <td><i class="fa fa-edit" style="color: #00a65a"> </i> <strong style="color: #00a65a"> Reason </strong></td>
-                                    <td>|</td>
-                                    <td>General</td>
-                                  </tr>
-                                  <tr>
-                                    <td><i class="fa fa-calendar" style="color: #00a65a"> </i> <strong style="color: #00a65a"> Follow up </strong></td>
-                                    <td>|</td>
-                                    <td>2021-03-19 <br> in 7 days</td>
-                                  </tr>
-                                  <tr>
-                                    <td><i class="fa fa-info-circle" style="color: #00a65a"> </i> <strong style="color: #00a65a">Status </strong></td>
-                                    <td>|</td>
-                                    <td><i class="fa fa-check" aria-hidden="true"></i></td>
-                                  </tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
-                            <div class="col-md-6">
-                              <div class="table-responsive">
-                                <table class="table no-margin">
-                                  <tbody>
-                                  <tr>
-                                    <td>Bijin</td>
-                                    <td>2020-01-01 11:53 PM</td>
-                                    <td>Abhyanganam Swedanam</td>
-                                    <td><i class="fa fa-check-circle"></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Bijin</td>
-                                    <td>2020-01-02 11:53 PM</td>
-                                    <td>Abhyanganam Swedanam</td>
-                                    <td><i class="fa fa-check-circle"></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Bijin</td>
-                                    <td>2020-01-03 11:53 PM</td>
-                                    <td>Abhyanganam Swedanam</td>
-                                    <td><i class="fa fa-check-circle"></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Bijin</td>
-                                    <td>2020-01-04 11:53 PM</td>
-                                    <td>Abhyanganam Swedanam</td>
-                                    <td><i class="fa fa-check-circle"></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Bijin</td>
-                                    <td>2020-01-05 11:53 PM</td>
-                                    <td>Abhyanganam Swedanam</td>
-                                    <td><i class="fa fa-check-circle"></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Bijin</td>
-                                    <td>2020-01-06 11:53 PM</td>
-                                    <td>Abhyanganam Swedanam</td>
-                                    <td><i class="fa fa-check-circle"></i></td>
-                                  </tr>
-                                  </tbody>
-                                </table>
+                            <div class="col-md-9">
+                              <div class="form-row">
+                                <div class="form-group col-md-3">
+                                  <p>
+                                    <i class="fa fa-hospital-o" style="color: Tomato"></i>
+                                    <strong style="color: Tomato">Branch </strong><br>
+                                    {{ i.branch.name }}
+                                  </p>
+                                </div>
+                                <div class="form-group col-md-3">
+                                  <p>
+                                    <i class="fa fa-user-md" style="color: #3c8dbc"></i>
+                                    <strong style="color: #3c8dbc">Patient Reason </strong><br>
+                                    {{ i.reason }}
+                                  </p>
+                                </div>
+                                <div class="form-group col-md-3">
+                                  <p>
+                                    <i class="fa fa-medkit" style="color: Purple"></i>
+                                    <strong style="color: Purple">Follow Up </strong><br>
+                                    {{ i.follow_up }}
+                                  </p>
+                                </div>
+                                <div class="form-group col-md-3">
+                                  <p>
+                                    <i class="fa fa-medkit" style="color: #D81B60"></i>
+                                    <strong style="color: #D81B60">Follow Up Status</strong><br>
+                                    {% if i.follow_up_status is True %} Completed {% else %} Pending {% endif %}
+                                  </p>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -225,15 +189,66 @@
                               <hr>
                             </div>
                           </div>
+                          {% if i.patient_schedule_timeline.count != 0 %}
+                          <div class="row">
+                            <div class="col-md-3">
+                              <i class="fa fa-plus" aria-hidden="true" style="color: MediumSeaGreen"></i>
+                              <strong style="color: MediumSeaGreen">Treatment</strong>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-md-9">
+                              <div class="table-responsive">
+                                <table class="table no-margin">
+                                  <tbody>
+                                  {% for j in i.patient_schedule_timeline.all %}
+                                  <tr>
+                                    <td><i class="fa fa-user" style="color: MediumSeaGreen"></i>
+                                      {% for k in j.staff.all %}
+                                        {{ k.user.get_full_name | default:k.user.username }}
+                                        {% if not forloop.last %}, {% endif %}
+                                      {% endfor %}
+                                    </td>
+                                    <td><i class="fa fa-calendar" style="color: MediumSeaGreen"></i> {{j.datetime | date:'F d, Y, g:i A' }}</td>
+                                    <td><i class="fa fa-plus-square" style="color: MediumSeaGreen"></i> {{ j.treatment.type }}</td>
+                                    {% if j.status == True %}
+                                    <td><i class="fa fa-check-circle" style="color: MediumSeaGreen"></i></td>
+                                    {% else %}
+                                    <td><i class="fa fa-times" style="color: #ce5642"></i></td>
+                                    {% endif %}
+                                  </tr>
+                                  {% endfor %}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-md-9">
+                              <span class="time" style="color: #999; font-size: 12px; margin-left: 9px">
+                                <i class="fa fa-list-ol" aria-hidden="true"></i> Total {{ i.patient_schedule_timeline.count }}
+                              </span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-9">
+                              <hr>
+                            </div>
+                          </div>
+                          {% endif %}
+                          {% if i.patient_files_timeline.count != 0 %}
                           <div class="row">
                             <div class="col-md-9">
                               <div class="form-row">
-                                <div class="form-group col-md-4">
-                                  <p> <i class="fa fa-file"></i> Patien_prescription_file.pdf</p>                              </div>
-                                <div class="form-group col-md-4">
-                                  <p> <i class="fa fa-file"></i> Patien_prescription_file.pdf</p>                               </div>
-                                <div class="form-group col-md-4">
-                                  <p> <i class="fa fa-file"></i> Patien_prescription_file.pdf</p>                               </div>
+                                {% for l in i.patient_files_timeline.all %}
+                                <div class="form-group col-md-3">
+                                  <p>
+                                    <i class="fa {{ l.file_type | file_label | lookup:'icon' }}" style="color: {{ l.file_type | file_label | lookup:'color' }}"></i>
+                                    <strong style="color: {{ l.file_type | file_label | lookup:'color' }}"> {{ l.file_type }}</strong>
+                                    <br> {{ l.file }}
+                                  </p>
+                                </div>
+                                {% endfor %}
                               </div>
                             </div>
                           </div>
@@ -242,9 +257,28 @@
                               <hr>
                             </div>
                           </div>
-                          <div class="container row">
-                            <div class="col-md-9">
-                              <p> <i class="fa fa-sticky-note"></i> show some notes here if any else hide this</p>
+                          {% endif %}
+                          <div class="form-row">
+                            <div class="col-md-6">
+                              <p> <i class="fa fa-sticky-note" style="color: SlateBlue"></i> <strong style="color: SlateBlue">Notes</strong><br>
+                                {{ i.notes | safe | default:'None' }}
+                              </p>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-md-9" style="text-align: right">
+                              <span title="createdBy" class="time" style="color: #999; font-size: 13px">
+                                <i class="fa fa-user" aria-hidden="true"></i> {{ i.createdBy.get_full_name }}
+                              </span>
+                              <span title="createdDate" class="time" style="color: #999; font-size: 13px">
+                                <i class="fa fa-clock-o" aria-hidden="true"></i> {{ i.createdDate | date:'F d, Y g:i A' }}
+                              </span><br>
+                              <span title="modifiedBy" class="time" style="color: #999; font-size: 13px">
+                                <i class="fa fa-user" aria-hidden="true"></i> {{ i.modifiedBy.get_full_name | default:"None"}}
+                              </span>
+                              <span title="modifiedDate" class="time" style="color: #999; font-size: 13px">
+                                <i class="fa fa-clock-o" aria-hidden="true"></i> {{ i.modifiedDate | date:'F d, Y g:i A' }}
+                              </span><br>
                             </div>
                           </div>
                         </div>
@@ -254,15 +288,7 @@
                       </div>
                     </div>
                   </li>
-                  <!-- END timeline item -->
-                  <!-- timeline item -->
-                  <!-- END timeline item -->
-                  <!-- timeline item -->
-                  <!-- END timeline item -->
-                  <!-- timeline time label -->
-                  <!-- /.timeline-label -->
-                  <!-- timeline item -->
-                  <!-- END timeline item -->
+                  {% endfor %}
                   <li>
                     <i class="fa fa-clock-o bg-gray"></i>
                   </li>

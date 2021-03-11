@@ -96,7 +96,7 @@ class PatientProfileUpdateView(LoginRequiredMixin, UpdateView):
             form.save(createdBy=createdBy, modifiedBy=request.user)
             return redirect('gui:home')
         print(form.errors)
-        return render(request, self.template_name, {'form': form, 'allergies_dropdown': allergies_dropdown })
+        return render(request, self.template_name, {'form': form, 'allergies_dropdown': allergies_dropdown})
 
 
 class PatientSearchView(generics.GenericAPIView):
@@ -151,3 +151,4 @@ class CalendarView(TemplateView):
         endTime = datetime.now() + timedelta(days=60)
         data = models.AppointmentModel.objects.filter(starttime__gte=startDate, starttime__lte=endTime)
         return render(request, self.template_name, {'data': data})
+
