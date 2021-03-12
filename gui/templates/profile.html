@@ -19,6 +19,25 @@
     <section class="content">
       <div class="row">
         <div class="col-md-3">
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+              </div>
+              <div class="modal-body">
+                  <iframe src="" id="iframe"></iframe>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
           <!-- Profile Image -->
           <div class="box box-primary">
             <div class="box-body box-profile">
@@ -285,7 +304,7 @@
                         </div>
                       </div>
                       <div class="timeline-footer">
-                        <a class="btn btn-primary btn-xs">Edit</a>
+                        <a href="{% url 'admin:gui_patienttimelinemodel_change' i.id %}" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal">Edit Timeline</a>
                       </div>
                     </div>
                   </li>
@@ -327,7 +346,18 @@
         format: 'yyyy-mm-dd',
         autoclose: true
       });
+    $('#myModal').on('hidden.bs.modal', function () {
+      window.location.reload();
+    });
   })
 </script>
-</script>
+<style>
+    .modal-dialog {
+      width: 70%;
+      height: 600px !important;
+    }
+    .modal-body {
+        height: 500px;
+    }
+  </style>
 {% endblock content %}

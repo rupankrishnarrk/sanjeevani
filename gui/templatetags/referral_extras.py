@@ -31,24 +31,25 @@ def file_label(value):
 
 @register.filter
 def bmi(value):
-    print(value.height)
-    a = value.height.__str__().split('.')
-    h_ft = int(a[0])
-    h_inch = int(a[1])
-    h_inch += h_ft * 12
-    h_cm = round(h_inch * 2.54, 1)
-    print(h_cm)
-    finalBmi = float(value.weight) / (h_cm / 100 * h_cm / 100)
-    if finalBmi < 18.5:
-        bmistatus = "Too Thin"
-        color = 'warning'
-    if finalBmi > 18.5 and finalBmi < 25:
-        bmistatus = "Healthy"
-        color = 'success'
-    if finalBmi > 25:
-        bmistatus = "Overweight"
-        color = 'danger'
-    return {"bmi" : finalBmi, "bmistatus" : bmistatus, "color" : color}
+    try:
+        a = value.height.__str__().split('.')
+        h_ft = int(a[0])
+        h_inch = int(a[1])
+        h_inch += h_ft * 12
+        h_cm = round(h_inch * 2.54, 1)
+        finalBmi = float(value.weight) / (h_cm / 100 * h_cm / 100)
+        if finalBmi < 18.5:
+            bmistatus = "Too Thin"
+            color = 'warning'
+        if finalBmi > 18.5 and finalBmi < 25:
+            bmistatus = "Healthy"
+            color = 'success'
+        if finalBmi > 25:
+            bmistatus = "Overweight"
+            color = 'danger'
+        return {"bmi" : finalBmi, "bmistatus" : bmistatus, "color" : color}
+    except:
+        return {"bmi": 0, 'bmistatus': 'None', "color" : "danger"}
 
 @register.filter
 def lookup(d, key):
