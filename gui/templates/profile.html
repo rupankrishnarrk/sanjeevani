@@ -62,7 +62,8 @@
                   <i class="fa fa-arrows-v"></i> <b>Height</b> <a class="pull-right">{{ patient_data.height }}</a>
                 </li>
                 <li class="list-group-item">
-                  <i class="fa fa-heartbeat"></i> <b>BMI</b> <a class="pull-right">000</a>
+                  <i class="fa fa-heartbeat"></i> <b>BMI</b> <a class="pull-right">{{ patient_data | bmi | lookup:'bmi' | floatformat:2 }}
+                   <span class="label label-{{ patient_data | bmi | lookup:'color' }}">{{ patient_data | bmi | lookup:'bmistatus' }} </span></a>
                 </li>
                 <li class="list-group-item">
                   <i class="fa fa-remove"></i> <b>Allergies</b>
@@ -327,5 +328,6 @@
         autoclose: true
       });
   })
+</script>
 </script>
 {% endblock content %}
