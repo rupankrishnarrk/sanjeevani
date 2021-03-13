@@ -6,7 +6,7 @@
         <section class="content-header">
           <h1>
             Dashboard
-            <small>Today</small>
+            <small style="color:orange"><h4><b>Today</b></h4></small>
           </h1>
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -21,7 +21,7 @@
               <!-- small box -->
               <div class="small-box bg-aqua">
                 <div class="inner">
-                  <h3>150</h3>
+                  <h3>{{ profile.count }}</h3>
                   <p>Patients Registrations</p>
                 </div>
                 <div class="icon">
@@ -35,8 +35,8 @@
               <!-- small box -->
               <div class="small-box bg-green">
                 <div class="inner">
-                  <h3>53<sup style="font-size: 20px">%</sup></h3>
-                  <p>Appointments</p>
+                  <h3>{{ appointment.count }}</h3>
+                  <p> Appointments</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-calendar"></i>
@@ -49,7 +49,7 @@
               <!-- small box -->
               <div class="small-box bg-yellow">
                 <div class="inner">
-                  <h3>44</h3>
+                  <h3>{{ panchakarma_schedule.count }}</h3>
                   <p>Panchakarma Therapy</p>
                 </div>
                 <div class="icon">
@@ -63,7 +63,7 @@
               <!-- small box -->
               <div class="small-box bg-red">
                 <div class="inner">
-                  <h3>65</h3>
+                  <h3>{{ consultation.count }}</h3>
                   <p>Consultations</p>
                 </div>
                 <div class="icon">

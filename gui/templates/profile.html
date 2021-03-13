@@ -3,6 +3,8 @@
 {% block content %}
 {% load crispy_forms_tags %}
 {% load referral_extras %}
+{% load humanize %}
+
     <div class="content-wrapper" style="min-height: 1136px;">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -42,7 +44,7 @@
           <div class="box box-primary">
             <div class="box-body box-profile">
               <img class="profile-user-img img-responsive img-circle" src="{{ patient_data.picture }}">
-              <h3 class="profile-username text-center">{{ patient_data.get_full_name }}</h3>
+              <h3 class="profile-username text-center">{{ patient_data.get_full_name | title }}</h3>
               <p class="text-muted text-center">{{ patient_data.id }}</p>
               <ul class="list-group list-group-unbordered">
                 <li class="list-group-item">
@@ -157,7 +159,7 @@
                   {% for i in patient_data.patient_timeline.all %}
                   <!-- timeline time label -->
                   <li class="time-label">
-                        <span class="bg-red">
+                        <span class="bg-blue">
                           {{ i.createdDate | date:'d F Y'}}
                         </span>
                   </li>
@@ -309,6 +311,18 @@
                     </div>
                   </li>
                   {% endfor %}
+                   <li class="time-label">
+                  <span class="bg-green">
+                    {{ patient_data.createdDate | date:'d F Y' }}
+                  </span>
+                  </li>
+                  <li>
+                    <i class="fa fa-user bg-blue"></i>
+                    <div class="timeline-item">
+                    <span class="time"><i class="fa fa-clock-o"></i> {{ patient_data.createdDate | naturaltime }}</span>
+                      <h3 class="timeline-header no-border"><a href="#">{{ patient_data.get_full_name | title }}</a> registered with us at branch <b>{{ patient_data.branch.name }}</b>.</h3>
+                    </div>
+                  </li>
                   <li>
                     <i class="fa fa-clock-o bg-gray"></i>
                   </li>

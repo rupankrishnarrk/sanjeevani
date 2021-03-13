@@ -2,6 +2,8 @@ from django import forms
 from gui import models
 from datetime import datetime
 from datetime import timedelta
+from django.contrib.auth.models import User
+
 
 
 class RegistrationForm(forms.ModelForm):
@@ -55,3 +57,18 @@ class AppointmentForm(forms.ModelForm):
     class Meta:
         model = models.AppointmentModel
         exclude = ['createdBy', 'modifiedBy']
+
+
+class ReminderForm(forms.ModelForm):
+
+    def save(self, createdBy=None, modifiedBy=None):
+        record = super(ReminderForm, self).save(commit=False)
+        record.createdBy = createdBy
+        record.modifiedBy = modifiedBy
+        record.save()
+        self.save_m2m()
+
+    class Meta:
+        model = models.ReminderModel
+        exclude = ['createdBy', 'modifiedBy']
+

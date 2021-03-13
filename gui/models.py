@@ -98,8 +98,8 @@ class PatientProfileModel(models.Model):
     )
     dob = models.DateField()
     weight = models.DecimalField(
-        max_digits=3,
-        decimal_places=1,
+        max_digits=5,
+        decimal_places=2,
         blank=True, null=True,
         validators=[
             MinValueValidator(0),
@@ -107,8 +107,8 @@ class PatientProfileModel(models.Model):
         ]
     )
     height = models.DecimalField(
-        max_digits=2,
-        decimal_places=1,
+        max_digits=3,
+        decimal_places=2,
         blank=True, null=True,
         validators=[
             MinValueValidator(0),
@@ -190,25 +190,26 @@ class TreatmentTypesModel(models.Model):
         max_length=255,
         choices=(
             ("General",
-             (("Other", "Other"), ("Rejuvenate Therapy", "Rejuvenate Therapy"))),
+             (("Other", "Other"),
+              ("Rejuvenate Therapy", "Rejuvenate Therapy"))),
             ("Panchakarma",
-             (("Abhyanganam Swedanam", "Abhyanganam Swedanam"),
-              ("Abhyanga Shirodhara", "Abhyanga Shirodhara"),
-              ("Kashaya Dhara", "Kashaya Dhara"),
-              ("Kashaya Vasti", "Kashaya Vasti"),
-              ("Kati Vasti", "Kati Vasti"),
-              ("Kizhi", "Kizhi"),
-              ("Ksheera Dhara", "Ksheera Dhara"),
-              ("Marma Therapy", "Marma Therapy"),
-              ("Navara Kizhi", "Navara Kizhi"),
-              ("Patrapinda Swedanam", "Patrapinda Swedanam"),
-              ("Pizhizhil", "Pizhizhil"),
-              ("Podi Kizhi", "Podi Kizhi"),
-              ("Shirodhara", "Shirodhara"),
-              ("Takradhara", "Takradhara"),
-              ("Udavarthanam", "Udavarthanam"),
-              ("Upanaham", "Upanaham"))),
-        )
+             (("Abhyanganam Swedanam Therapy", "Abhyanganam Swedanam Therapy"),
+              ("Abhyanga Shirodhara Therapy", "Abhyanga Shirodhara Therapy"),
+              ("Kashaya Dhara Therapy", "Kashaya Dhara Therapy"),
+              ("Kashaya Vasti Therapy", "Kashaya Vasti Therapy"),
+              ("Kati Vasti Therapy", "Kati Vasti Therapy"),
+              ("Kizhi Therapy", "Kizhi Therapy"),
+              ("Ksheera Dhara Therapy", "Ksheera Dhara Therapy"),
+              ("Marma Therapy Therapy", "Marma Therapy Therapy"),
+              ("Navara Kizhi Therapy", "Navara Kizhi Therapy"),
+              ("Patrapinda Swedanam Therapy", "Patrapinda Swedanam Therapy"),
+              ("Pizhizhil Therapy", "Pizhizhil Therapy"),
+              ("Podi Kizhi Therapy", "Podi Kizhi Therapy"),
+              ("Shirodhara Therapy", "Shirodhara Therapy"),
+              ("Takradhara Therapy", "Takradhara Therapy"),
+              ("Udavarthanam Therapy", "Udavarthanam Therapy"),
+              ("Upanaham Therapy", "Upanaham Therapy"))),
+        ), unique=True
     )
     price = models.IntegerField()
     createdDate = models.DateTimeField(auto_now_add=True)
@@ -297,3 +298,20 @@ class AppointmentModel(models.Model):
     class Meta:
         verbose_name = "Appointment"
         verbose_name_plural = "Appointments"
+
+
+class ReminderModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    task = models.CharField(max_length=255)
+    starttime = models.DateTimeField()
+    status = models.BooleanField()
+    notify = models.ManyToManyField(User, related_name='notify' )
+    notes = models.TextField(blank=True, null=True)
+    createdBy = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reminder_created", null=True, blank=True)
+    modifiedBy = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reminder_modified", null=True, blank=True)
+    createdDate = models.DateTimeField(auto_now_add=True)
+    modifiedDate = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Reminder"
+        verbose_name_plural = "Reminders"

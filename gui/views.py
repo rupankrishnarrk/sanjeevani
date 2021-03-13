@@ -152,3 +152,36 @@ class CalendarView(TemplateView):
         data = models.AppointmentModel.objects.filter(starttime__gte=startDate, starttime__lte=endTime)
         return render(request, self.template_name, {'data': data})
 
+
+class ReminderView(CreateView):
+    template_name = "reminder.html"
+
+    def get(self, request, *args, **kwargs):
+        form = forms.ReminderForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = forms.ReminderForm(request.POST)
+        if form.is_valid():
+            form.save(createdBy=request.user)
+            return redirect('gui:home')
+        return render(request, self.template_name, {'form': form})
+
+
+class ReminderUpdateView(UpdateView):
+    template_name = "reminder.html"
+
+    def get(self, request, *args, **kwargs):
+        data = get_object_or_404(models.ReminderModel, pk=kwargs['id'])
+        form = forms.ReminderForm(instance=data)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        data = get_object_or_404(models.ReminderModel, pk=kwargs['id'])
+        form = forms.ReminderForm(request.POST, instance=data)
+        createdBy = data.createdBy
+        if form.is_valid():
+            form.save(createdBy=createdBy, modifiedBy=request.user)
+            return redirect('gui:home')
+        print(form.errors)
+        return render(request, self.template_name, {'form': form})

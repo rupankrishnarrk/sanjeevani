@@ -86,7 +86,7 @@ class AllergiesAdmin(admin.ModelAdmin):
 
 @admin.register(models.AppointmentModel)
 class AppointmentAdmin(admin.ModelAdmin):
-    list_display = ['name', 'mobile', 'starttime', 'status']
+    list_display = ['name', 'visit', 'mobile', 'starttime', 'status']
     readonly_fields = ['createdBy', 'modifiedBy']
 
     def save_model(self, request, rows, form, change):
@@ -109,3 +109,9 @@ class TreatmentTypesAdmin(admin.ModelAdmin):
             rows.modifiedDate = datetime.now()
             rows.modifiedBy_id = request.user.id
         super().save_model(request, rows, form, change)
+
+@admin.register(models.ReminderModel)
+class ReminderAdmin(admin.ModelAdmin):
+    model = models.ReminderModel
+    list_display = ['task', 'starttime', 'status', 'createdDate', 'modifiedDate']
+    autocomplete_fields = ('notify',)
