@@ -11,6 +11,7 @@ from rest_framework import response
 from rest_framework import status
 from datetime import datetime
 from datetime import timedelta
+from django.urls import reverse
 
 allergies_dropdown = ['Drug Allergy', 'Food Allergy', 'Insect Allergy']
 
@@ -19,7 +20,8 @@ class Home(LoginRequiredMixin, TemplateView):
     template_name = "home.html"
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, {})
+        reminder = models.ReminderModel.objects.all()
+        return render(request, self.template_name, {'reminder': reminder})
 
 
 class Profile(LoginRequiredMixin, TemplateView):
@@ -67,8 +69,8 @@ class PatientProfileCreateView(LoginRequiredMixin, FormView):
         ], ignore_conflicts=True)
         form = forms.RegistrationForm(request.POST)
         if form.is_valid():
-            form.save(createdBy=request.user)
-            return redirect('gui:home')
+            record = form.save(createdBy=request.user)
+            return redirect(reverse("gui:profile", kwargs={'identifier': record.identifier}))
         print(form.errors)
         return render(request, self.template_name, {'form': form, 'allergies_dropdown': allergies_dropdown })
 
@@ -93,8 +95,8 @@ class PatientProfileUpdateView(LoginRequiredMixin, UpdateView):
         form = forms.RegistrationForm(request.POST, instance=data)
         createdBy = data.createdBy
         if form.is_valid():
-            form.save(createdBy=createdBy, modifiedBy=request.user)
-            return redirect('gui:home')
+            record = form.save(createdBy=createdBy, modifiedBy=request.user)
+            return redirect(reverse("gui:profile", kwargs={'identifier': record.identifier}))
         print(form.errors)
         return render(request, self.template_name, {'form': form, 'allergies_dropdown': allergies_dropdown})
 
@@ -104,7 +106,15 @@ class PatientSearchView(generics.GenericAPIView):
     def get(self, request):
         if request.is_ajax():
             q = request.GET.get('q', '')
-            search = models.PatientProfileModel.objects.filter(mobile__contains=q).values('id', 'mobile')[:5]
+            search = models.PatientProfileModel.objects.filter(mobile__contains=q).values('id', 'mobile', 'first_name', 'identifier')[:5]
+            search = [
+                {
+                    "id": i['id'],
+                    "mobile": i['mobile'],
+                    "first_name": i['first_name'],
+                    "url": reverse("gui:profile", kwargs={'identifier': i['identifier']})
+                 }
+                for i in search]
             return response.Response(search, status=status.HTTP_200_OK)
 
 

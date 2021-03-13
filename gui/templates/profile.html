@@ -57,7 +57,7 @@
                   <i class="fa fa-birthday-cake"></i> <b>DOB</b> <a class="pull-right">{{ patient_data.dob }}</a>
                 </li>
                 <li class="list-group-item">
-                  <i class="fa fa-user"></i> <b>Age</b> <a class="pull-right">{{ patient_data.dob }}</a>
+                  <i class="fa fa-user"></i> <b>Age</b> <a class="pull-right">{{ patient_data.dob | timesince }}</a>
                 </li>
                  <li class="list-group-item">
                   <i class="fa fa-hospital-o"></i> <b>Branch</b> <a class="pull-right">{{ patient_data.branch.name }}</a>

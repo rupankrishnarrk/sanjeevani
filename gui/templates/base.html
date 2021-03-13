@@ -64,28 +64,83 @@
           <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
           <span class="sr-only">Toggle navigation</span>
           </a>
+          <div class="col-xs-3">
+            <form action="#" method="get" class="sidebar-form">
+            <div class="input-group">
+              <input type="text" name="q" class="form-control input-sm" placeholder="Search Patient..." id="search-patient">
+              <span class="input-group-btn">
+              <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+              </button>
+              </span>
+            </div>
+          </form>
+          </div>
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
               <!-- Messages: style can be found in dropdown.less-->
+              {% if birthday.count > 0 %}
               <li class="dropdown messages-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i class="fa fa-heartbeat"></i>
-                <span class="label label-warning">{{ panchakarma_schedule.count }}</span>
+                <i class="fa fa-birthday-cake"></i>
+                <span class="label label-info">{{ birthday.count }}</span>
                 </a>
                 <ul class="dropdown-menu">
-                  <li class="header">You have {{ panchakarma_schedule.count }} Panchakarma Therapy</li>
+                  <li class="header">You have {{ birthday.count }} Patient Birthdays</li>
                   <li>
                     <!-- inner menu: contains the actual data -->
                     <ul class="menu">
-                      {% for i in panchakarma_schedule.all %}
+                      {% for g in birthday.all %}
                       <li>
                         <!-- start message -->
-                        <a href="#">
+                        <a href="{% url 'gui:profile' g.identifier %}">
                           <div class="pull-left">
-                            <img src="{% static "img/user2-160x160.jpg" %}" class="img-circle" alt="User Image">
+                            <img src="{{ g.picture }}">
                           </div>
                           <h4>
-                            {{ i.schedule_timeline.patient.get_full_name }}
+                            {{ g.get_full_name | title }}
+                            <small><i class="fa fa-clock-o"></i> {{ g.dob | timesince }}</small>
+                          </h4>
+                          <p>Birthday on {{ g.dob | date:'F d'}}</p>
+                        </a>
+                      </li>
+                      {% endfor %}
+                      <!-- end message -->
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              {% else %}
+              <li class="dropdown messages-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-birthday-cake"></i>
+                <span class="label label-info">{{ birthday.count }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li class="header">You have {{ birthday.count }} Patient Birthday</li>
+                </ul>
+              </li>
+              {% endif %}
+              <!-- panchakarma_schedule-->
+              {% if panchakarma_schedule_alert.count > 0 %}
+              <li class="dropdown messages-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-heartbeat"></i>
+                <span class="label label-warning">{{ panchakarma_schedule_alert.count }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li class="header">You have {{ panchakarma_schedule_alert.count }} Panchakarma Therapy</li>
+                  <li>
+                    <!-- inner menu: contains the actual data -->
+                    <ul class="menu">
+                      {% for i in panchakarma_schedule_alert.all %}
+                      <li>
+                        <!-- start message -->
+                        <a href="{% url 'gui:profile' i.schedule_timeline.patient.identifier %}">
+                          <div class="pull-left">
+                            <img src="{{ i.schedule_timeline.patient.picture }}">
+                          </div>
+                          <h4>
+                            {{ i.schedule_timeline.patient.get_full_name | title }}
                             <small><i class="fa fa-clock-o"></i> {{ i.datetime | naturaltime }}</small>
                           </h4>
                           <p>{{ i.treatment.type }}</p>
@@ -95,29 +150,42 @@
                       <!-- end message -->
                     </ul>
                   </li>
-                  <li class="footer"><a href="#">See all in calendar</a></li>
+                  <li class="footer"><a href="{% url 'gui:calendar' %}">See all in calendar</a></li>
                 </ul>
               </li>
-              <!-- Notifications: style can be found in dropdown.less -->
+              {% else %}
+              <li class="dropdown messages-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-heartbeat"></i>
+                <span class="label label-warning">{{ panchakarma_schedule_alert.count }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li class="header">You have {{ panchakarma_schedule_alert.count }} Panchakarma Therapy</li>
+                  <li class="footer"><a href="{% url 'gui:calendar' %}">See all in calendar</a></li>
+                </ul>
+              </li>
+              {% endif %}
+              <!-- appointment_alert-->
+              {% if appointment_alert.count > 0 %}
               <li class="dropdown messages-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-calendar"></i>
-                <span class="label label-success">{{ appointment.count }}</span>
+                <span class="label label-success">{{ appointment_alert.count }}</span>
                 </a>
                 <ul class="dropdown-menu">
-                  {% for j in appointment.all %}
-                  <li class="header">You have {{ appointment.count }} Appointments</li>
+                  {% for j in appointment_alert.all %}
+                  <li class="header">You have {{ appointment_alert.count }} Appointments</li>
                   <li>
                     <!-- inner menu: contains the actual data -->
                     <ul class="menu">
                       <li>
                         <!-- start message -->
-                        <a href="#">
+                        <a href="{% url 'gui:appointment-update' j.id %}">
                           <div class="pull-left">
-                            <img src="{% static "img/user2-160x160.jpg" %}" class="img-circle" alt="User Image">
+                            <img src="{% static "img/picture.png" %}" class="img-circle" alt="User Image">
                           </div>
                           <h4>
-                            {{ j.name }}
+                            {{ j.name | title }}
                             <small><i class="fa fa-clock-o"></i> {{ j.starttime | naturaltime }}</small>
                           </h4>
                           <p>{{ j.visit }}</p>
@@ -127,29 +195,42 @@
                       <!-- end message -->
                     </ul>
                   </li>
-                  <li class="footer"><a href="#">See all in calendar</a></li>
+                  <li class="footer"><a href="{% url 'gui:calendar' %}">See all in calendar</a></li>
                 </ul>
               </li>
-              <!-- Tasks: style can be found in dropdown.less -->
+              {% else %}
+              <li class="dropdown messages-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-calendar"></i>
+                <span class="label label-success">{{ appointment_alert.count }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li class="header">You have {{ appointment_alert.count }} Appointments</li>
+                  <li class="footer"><a href="{% url 'gui:calendar' %}">See all in calendar</a></li>
+                </ul>
+              </li>
+              {% endif %}
+              <!-- Consultation aler-->
+              {% if consultation_alert.count > 0 %}
               <li class="dropdown messages-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-stethoscope"></i>
-                <span class="label label-danger">{{ consultation.count }}</span>
+                <span class="label label-danger">{{ consultation_alert.count }}</span>
                 </a>
                 <ul class="dropdown-menu">
-                  {% for k in consultation.all %}
-                  <li class="header">You have {{ consultation.count }} Consultations</li>
+                  {% for k in consultation_alert.all %}
+                  <li class="header">You have {{ consultation_alert.count }} Consultations</li>
                   <li>
                     <!-- inner menu: contains the actual data -->
                     <ul class="menu">
                       <li>
                         <!-- start message -->
-                        <a href="#">
+                        <a href="{% url 'gui:appointment-update' k.id %}">
                           <div class="pull-left">
-                            <img src="{% static "img/user2-160x160.jpg" %}" class="img-circle" alt="User Image">
+                            <img src="{% static 'img/picture.png' %}" class="img-circle" alt="User Image">
                           </div>
                           <h4>
-                            {{ k.name }}
+                            {{ k.name | title }}
                             <small><i class="fa fa-clock-o"></i> {{ k.starttime | naturaltime }}</small>
                           </h4>
                           <p>{{ k.visit }}</p>
@@ -157,11 +238,22 @@
                       </li><!-- end message -->
                     </ul>
                   </li>
-                  <li class="footer"><a href="#">See all in calendar</a></li>
+                  <li class="footer"><a href="{% url 'gui:calendar' %}">See all in calendar</a></li>
                   {% endfor %}
                 </ul>
               </li>
-              <!-- User Account: style can be found in dropdown.less -->
+              {% else %}
+              <li class="dropdown messages-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-stethoscope"></i>
+                <span class="label label-danger">{{ consultation_alert.count }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li class="header">You have {{ consultation_alert.count }} Consultations</li>
+                  <li class="footer"><a href="{% url 'gui:calendar' %}">See all in calendar</a></li>
+                </ul>
+              </li>
+              {% endif %}
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <img src="{% static "img/Sanjeevanilogo.png" %}" class="user-image" alt="User Image">
@@ -187,7 +279,6 @@
                   </li>
                 </ul>
               </li>
-              <!-- Control Sidebar Toggle Button -->
               <li>
                 <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
               </li>
@@ -210,21 +301,12 @@
             </div>
           </div>
           <!-- search form -->
-          <form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-              <input type="text" name="q" class="form-control" placeholder="Search...">
-              <span class="input-group-btn">
-              <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-              </button>
-              </span>
-            </div>
-          </form>
           <!-- /.search form -->
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MAIN NAVIGATION</li>
             <li>
-              <a href="">
+              <a href="{% url 'gui:home' %}" >
               <i class="fa fa-dashboard"></i> <span>Home</span>
               </a>
             </li>
@@ -234,16 +316,9 @@
               </a>
             </li>
             <li>
-              <a href="">
-              <i class="fa fa-users"></i> <span>Patients</span>
-              </a>
-            </li>
-            <li>
-              <a href="/calendar">
+             <a href="{% url 'gui:calendar' %}" >
               <i class="fa fa-calendar"></i> <span>Appointment</span>
               <span class="pull-right-container">
-              <small class="label pull-right bg-red">3</small>
-              <small class="label pull-right bg-blue">17</small>
               </span>
               </a>
             </li>
@@ -470,4 +545,118 @@
     <!-- Select2 -->
     <script src="{% static "bower_components/select2/dist/js/select2.js" %}"></script>
   </body>
+<style>
+  .skin-blue .sidebar-form input[type="text"], .skin-blue .sidebar-form .btn {
+    box-shadow: none;
+    background-color: #374850;
+    border: 1px solid transparent;
+    height: 27px;
+}
+
+.ui-front {
+	z-index: 100;
+}
+/* Overlays */
+.ui-widget-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+.ui-autocomplete {
+	position: absolute;
+	top: 0;
+	left: 0;
+	cursor: default;
+	max-height: 200px;
+	overflow-y: auto;
+}
+.ui-menu {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: block;
+	outline: 0;
+}
+.ui-menu .ui-menu {
+	position: absolute;
+}
+.ui-menu .ui-menu-item {
+	margin: 0;
+	cursor: pointer;
+	/* support: IE10, see #8844 */
+	list-style-image: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
+}
+.ui-menu .ui-menu-item-wrapper {
+	position: relative;
+	padding: 3px 1em 3px .4em;
+}
+.ui-menu .ui-menu-divider {
+	margin: 5px 0;
+	height: 0;
+	font-size: 0;
+	line-height: 0;
+	border-width: 1px 0 0 0;
+}
+.ui-menu .ui-state-focus,
+.ui-menu .ui-state-active {
+	margin: -1px;
+}
+/* icon support */
+.ui-menu-icons {
+	position: relative;
+}
+.ui-menu-icons .ui-menu-item-wrapper {
+	padding-left: 2em;
+}
+/* left-aligned */
+.ui-menu .ui-icon {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: .2em;
+	margin: auto 0;
+}
+/* right-aligned */
+.ui-menu .ui-menu-icon {
+	left: auto;
+	right: 0;
+}
+.ui-widget-content.ui-widget{
+	border: 0.5px #dddddd;
+	/*border: 0.5px solid #dddddd;*/
+	background: #ffffff;
+	color: #333333;
+}
+li .ui-state-active {
+	border: 1px solid #003eff;
+	background: #007fff;
+	font-weight: normal;
+	color: #ffffff;
+}
+</style>
+<script>
+  $(function() {
+  $("#search-patient").autocomplete({
+    classes: {
+      "ui-autocomplete": "incident-search",
+    },
+    source: "/api/search/patient/",
+    minLength: 3,
+    delay: 1500,
+    search: function (e, u) {
+        $('#incident-loading').attr('hidden', false);
+    },
+    select: function (event, ui) {
+      window.open(ui.item.url);
+    },
+    response: function (e, u) {
+        $('#incident-loading').attr('hidden', true);
+    }
+  }).autocomplete( "instance" )._renderItem = function( ul, item ) {
+        return $( "<li><div><span>"+item.first_name+"</span></div></li>" ).appendTo( ul );
+      };
+});
+</script>
 </html>

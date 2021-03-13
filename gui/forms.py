@@ -30,7 +30,7 @@ class RegistrationForm(forms.ModelForm):
         record.modifiedBy = modifiedBy
         record.save()
         self.save_m2m()
-
+        return record
 
 
 class PatientTimelineForm(forms.ModelForm):
@@ -53,6 +53,8 @@ class AppointmentForm(forms.ModelForm):
         record.createdBy = createdBy
         record.modifiedBy = modifiedBy
         record.save()
+        return record
+
 
     class Meta:
         model = models.AppointmentModel

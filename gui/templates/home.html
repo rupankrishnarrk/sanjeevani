@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load humanize %}
 
 {% block content %}
       <div class="content-wrapper">
@@ -75,7 +76,56 @@
             <!-- ./col -->
           </div>
           <!-- /.row -->
+          <div class="row">
+        <!-- Left col -->
+        <section class="col-lg-7 connectedSortable">
+          <!-- Custom tabs (Charts with tabs)-->
+          <!-- Chat box -->
+          <!-- /.box (chat box) -->
+
+          <!-- TO DO List -->
+          <div class="box box-primary">
+            <div class="box-header">
+              <i class="ion ion-clipboard"></i>
+
+              <h3 class="box-title">To Do List</h3>
+
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <!-- See dist/js/pages/dashboard.js to activate the todoList plugin -->
+              <ul class="todo-list">
+                {% for l in reminder %}
+                <li>
+                  <!-- drag handle -->
+                  <span class="handle">
+                        <i class="fa fa-ellipsis-v"></i>
+                        <i class="fa fa-ellipsis-v"></i>
+                      </span>
+                  <!-- checkbox -->
+                  <span class="text"><u>{{ l.task }}</u></span>
+                  <span class="text">{{ l.starttime | date:'F d, Y g:s A' }}</span>
+                  <!-- Emphasis label -->
+                  <small class="label label-info"><i class="fa fa-clock-o"></i> {{ l.starttime | naturaltime }}</small>
+                  <!-- General tools such as edit or delete-->
+                  <div class="tools">
+                    <a href="{% url 'gui:reminder-update' l.id %}" class="fa fa-edit"></a>
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+            <div class="box-footer clearfix no-border">
+              <a href="{% url 'gui:reminder' %}" type="button" class="btn btn-default pull-right"><i class="fa fa-plus"></i> Add item</a>
+            </div>
+          </div>
         </section>
+      </div>
+        </section>
+        <!-- /.box-header -->
+        <!-- Main row -->
+      <!-- /.row (main row) -->
+            <!-- /.box-body -->
         <!-- /.content -->
       </div>
 {% endblock content %}
