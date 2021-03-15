@@ -3,7 +3,10 @@ from gui import models
 from datetime import datetime
 from datetime import timedelta
 from django.contrib.auth.models import User
-
+from gui import validators
+from datetime import datetime
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 
 class RegistrationForm(forms.ModelForm):
@@ -46,15 +49,40 @@ class PatientTimelineForm(forms.ModelForm):
         exclude = ['follow_up_status', 'patient', 'createdBy', 'modifiedBy']
 
 
-class AppointmentForm(forms.ModelForm):
+class AppointmentCreateForm(forms.ModelForm):
+
+    starttime = forms.DateTimeField(validators=[validators.validate_datetime_not_in_past])
 
     def save(self, createdBy=None, modifiedBy=None):
-        record = super(AppointmentForm, self).save(commit=False)
+        record = super(AppointmentCreateForm, self).save(commit=False)
         record.createdBy = createdBy
         record.modifiedBy = modifiedBy
         record.save()
         return record
 
+    class Meta:
+        model = models.AppointmentModel
+        exclude = ['createdBy', 'modifiedBy', 'status']
+
+
+class AppointmentUpdateForm(forms.ModelForm):
+
+    def clean_starttime(self):
+        if self.instance.starttime == self.cleaned_data['starttime']:
+            return self.cleaned_data['starttime']
+        elif self.cleaned_data['starttime'] <= datetime.now():
+                raise ValidationError(
+                    _('Entered Datetime should be future datetime or equal to current time')
+                )
+        else:
+            return self.cleaned_data['starttime']
+
+    def save(self, createdBy=None, modifiedBy=None):
+        record = super(AppointmentUpdateForm, self).save(commit=False)
+        record.createdBy = createdBy
+        record.modifiedBy = modifiedBy
+        record.save()
+        return record
 
     class Meta:
         model = models.AppointmentModel

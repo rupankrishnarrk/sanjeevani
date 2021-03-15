@@ -9,6 +9,7 @@ def dashboard(request):
     today = date.today()
     last_7_days = date.today() - timedelta(days=7)
     after_15_day = date.today() + timedelta(days=15)
+    patient_count =  models.PatientProfileModel.objects.count()
     patient = models.PatientProfileModel.objects.filter(createdDate__contains=today)
     appointment = models.AppointmentModel.objects.filter(starttime__contains=today).exclude(visit='Consultation')
     consultation = models.AppointmentModel.objects.filter(starttime__contains=today, visit='Consultation')
@@ -18,8 +19,10 @@ def dashboard(request):
     consultation_alert = models.AppointmentModel.objects.filter(starttime__gte=datetime.now(), starttime__lte=datetime.now() + timedelta(days=1), visit='Consultation')
     panchakarma_schedule_alert = models.PatientScheduleModel.objects.filter(treatment__type__contains='Therapy', datetime__gte=datetime.now(), datetime__lte=datetime.now() + timedelta(days=1))
     birthday = models.PatientProfileModel.objects.filter(
-        Q(dob__month=last_7_days.month, dob__day__gte=last_7_days.day) | Q(dob__month=after_15_day.month, dob__day__lte=after_15_day.day)
-)
+        Q(dob__month=last_7_days.month, dob__day__gte=last_7_days.day) | Q(dob__month=after_15_day.month, dob__day__lte=after_15_day.day))
+    appointment_status = models.AppointmentModel.objects.filter(starttime__lte=datetime.now(), status__isnull=True)
+    panchakarma_status = models.PatientScheduleModel.objects.filter(datetime__lte=datetime.now(), status=False)
+    followup = models.PatientTimelineModel.objects.filter(follow_up__gte=datetime.now(), follow_up_status=False)
     return {
         'profile': patient,
         'appointment': appointment,
@@ -28,5 +31,9 @@ def dashboard(request):
         'consultation_alert': consultation_alert,
         'panchakarma_schedule': panchakarma_schedule,
         'panchakarma_schedule_alert': panchakarma_schedule_alert,
-        'birthday': birthday
+        'birthday': birthday,
+        'patient_count': patient_count,
+        'appointment_status': appointment_status,
+        'panchakarma_status': panchakarma_status,
+        'followup': followup
     }

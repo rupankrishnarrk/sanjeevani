@@ -90,13 +90,24 @@
       },
       //Random default events
       events    : [
-        {% for i in data %}
+        {% for i in appointment %}
           {
           'id' : '{{ i.id }}',
+          'url':  '{% url 'gui:appointment-update' i.id %}',
           'title': '{{ i.name }}',
           'start'          : '{{ i.starttime | date:"Y-m-d H:i" }}',
           'backgroundColor': '#f56954', //red
           'borderColor'    : '#f56954' //red
+          },
+        {% endfor %}
+        {% for j in panchakarma %}
+          {
+          'id' : '{{ j.id }}',
+          'url':  '{% url 'gui:profile' j.schedule_timeline.patient.identifier %}#{{ j.schedule_timeline.id }}',
+          'title': '{{ j.schedule_timeline.patient.get_full_name }}',
+          'start'          : '{{ j.datetime | date:"Y-m-d H:i" }}',
+          'backgroundColor': '#3c8dbc', //red
+          'borderColor'    : '#3c8dbc' //red
           },
         {% endfor %}
       ],
@@ -106,7 +117,7 @@
 
       eventClick: function(info) {
         console.log(info)
-        window.location.replace("/appointment/" + info.id)
+        window.location.href = info.url;
         //alert('ID: ' + info.id);
       },
 

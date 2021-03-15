@@ -137,3 +137,8 @@ LOGIN_REDIRECT_URL = '/home'
 LOGOUT_REDIRECT_URL = '/login'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# Time Appear in 12 hours
+TIME_INPUT_FORMATS = [
+    '%I:%M %p'
+]
