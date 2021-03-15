@@ -3,6 +3,7 @@ from django.core.validators import RegexValidator, \
     MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 from uuid import uuid4
+from gui import validators
 
 
 # Create your models here.
@@ -279,7 +280,7 @@ class AppointmentModel(models.Model):
             phone_regex
         ]
     )
-    starttime = models.DateTimeField()
+    starttime = models.DateTimeField(validators=[validators.validate_time_in_work_hours])
     status = models.CharField(
         blank=True, null=True,
         max_length=255,

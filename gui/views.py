@@ -118,11 +118,11 @@ class AppointmentView(CreateView):
     template_name = "appointment.html"
 
     def get(self, request, *args, **kwargs):
-        form = forms.AppointmentCreateForm()
+        form = forms.AppointmentForm()
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
-        form = forms.AppointmentCreateForm(request.POST)
+        form = forms.AppointmentForm(request.POST)
         if form.is_valid():
             form.save(createdBy=request.user)
             return redirect('gui:calendar')
@@ -135,12 +135,12 @@ class AppointmentUpdateView(UpdateView):
 
     def get(self, request, *args, **kwargs):
         data = get_object_or_404(models.AppointmentModel, pk=kwargs['identifier'])
-        form = forms.AppointmentUpdateForm(instance=data)
+        form = forms.AppointmentForm(instance=data)
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
         data = get_object_or_404(models.AppointmentModel, pk=kwargs['identifier'])
-        form = forms.AppointmentUpdateForm(request.POST, instance=data)
+        form = forms.AppointmentForm(request.POST, instance=data)
         createdBy = data.createdBy
         if form.is_valid():
             form.save(createdBy=createdBy, modifiedBy=request.user)

@@ -49,36 +49,33 @@ class PatientTimelineForm(forms.ModelForm):
         exclude = ['follow_up_status', 'patient', 'createdBy', 'modifiedBy']
 
 
-class AppointmentCreateForm(forms.ModelForm):
+class AppointmentForm(forms.ModelForm):
 
-    starttime = forms.DateTimeField(validators=[validators.validate_datetime_not_in_past])
-
-    def save(self, createdBy=None, modifiedBy=None):
-        record = super(AppointmentCreateForm, self).save(commit=False)
-        record.createdBy = createdBy
-        record.modifiedBy = modifiedBy
-        record.save()
-        return record
-
-    class Meta:
-        model = models.AppointmentModel
-        exclude = ['createdBy', 'modifiedBy', 'status']
-
-
-class AppointmentUpdateForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(AppointmentForm, self).__init__(*args, **kwargs)
+        if self.instance._state.adding:
+            del self.fields['status']
 
     def clean_starttime(self):
-        if self.instance.starttime == self.cleaned_data['starttime']:
-            return self.cleaned_data['starttime']
-        elif self.cleaned_data['starttime'] <= datetime.now():
+        if self.instance._state.adding:
+            if self.cleaned_data['starttime'] <= datetime.now():
                 raise ValidationError(
                     _('Entered Datetime should be future datetime or equal to current time')
                 )
-        else:
             return self.cleaned_data['starttime']
 
+        else:
+            if self.instance.starttime == self.cleaned_data['starttime']:
+                return self.cleaned_data['starttime']
+            elif self.cleaned_data['starttime'] <= datetime.now():
+                raise ValidationError(
+                    _('Entered Datetime should be future datetime or equal to current time')
+                )
+            else:
+                return self.cleaned_data['starttime']
+
     def save(self, createdBy=None, modifiedBy=None):
-        record = super(AppointmentUpdateForm, self).save(commit=False)
+        record = super(AppointmentForm, self).save(commit=False)
         record.createdBy = createdBy
         record.modifiedBy = modifiedBy
         record.save()
